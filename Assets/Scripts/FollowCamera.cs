@@ -1,69 +1,91 @@
 using UnityEngine;
 
 /// <summary>
-/// Smooth third-person follow camera. Trails the target at a zoomable distance and
-/// keeps it centred. Scroll wheel zooms (proportional, so it feels the same at any
-/// altitude); hold right mouse to orbit. Runs in LateUpdate so it reacts to the
-/// rocket's post-physics position. Camera "up" stays world-up for v1.
+/// Smooth third-person follow camera framed RELATIVE TO THE PLANET: the planet
+/// stays behind/below the rocket wherever it flies, "up" points away from the
+/// planet centre (so the horizon stays level and never rolls), and zooming dollies
+/// straight in/out along the view axis without rotating. Scroll = zoom, hold right
+/// mouse = orbit. Runs in LateUpdate so it reacts to the rocket's post-physics pose.
 /// </summary>
 public class FollowCamera : MonoBehaviour
 {
     [Tooltip("Transform to follow (the Rocket). Auto-found by name if unset.")]
     public Transform target;
+    [Tooltip("Planet to frame against. Auto-found if unset.")]
+    public PlanetBody planet;
 
     [Header("Distance / zoom")]
-    public float distance = 25f;
+    public float distance = 30f;
     public float minDistance = 8f;
-    public float maxDistance = 400f;
+    public float maxDistance = 600f;
     [Tooltip("Zoom responsiveness per scroll notch.")]
     public float zoomStrength = 3f;
 
     [Header("Smoothing")]
     [Tooltip("Position smoothing time for the follow (smaller = snappier).")]
-    public float followSmoothTime = 0.2f;
+    public float followSmoothTime = 0.15f;
 
     [Header("Orbit (hold right mouse)")]
     public float orbitSpeed = 3f;
+    [Tooltip("Azimuth around the rocket (degrees) in the planet's frame.")]
     public float yaw = 0f;
-    public float pitch = 15f;
+    [Tooltip("Elevation above the local horizon (degrees). 0 = level side view, 90 = straight above.")]
+    public float elevation = 18f;
 
     Vector3 velocity; // SmoothDamp state
 
     void Start()
     {
-        if (target == null)
-        {
-            GameObject rk = GameObject.Find("Rocket");
-            if (rk != null) target = rk.transform;
-        }
-        if (target != null) transform.position = DesiredPosition(); // snap, no startup glide
+        if (target == null) { GameObject rk = GameObject.Find("Rocket"); if (rk != null) target = rk.transform; }
+        if (planet == null) planet = FindObjectOfType<PlanetBody>();
+        if (target != null) { transform.position = DesiredPosition(); ApplyLook(); } // snap, no startup glide
     }
 
     void LateUpdate()
     {
         if (target == null) return;
 
-        // Scroll zoom (proportional -> consistent feel across the altitude range)
+        // Scroll zoom (proportional -> consistent feel at any altitude). Pure dolly: distance
+        // only scales position along CamDir, so the view direction and roll are unaffected.
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scroll) > 0.0001f)
             distance = Mathf.Clamp(distance * Mathf.Exp(-scroll * zoomStrength), minDistance, maxDistance);
 
-        // Right-mouse orbit
+        // Right-mouse orbit, in the planet-relative frame.
         if (Input.GetMouseButton(1))
         {
             yaw += Input.GetAxis("Mouse X") * orbitSpeed;
-            pitch -= Input.GetAxis("Mouse Y") * orbitSpeed;
-            pitch = Mathf.Clamp(pitch, -80f, 80f);
+            elevation = Mathf.Clamp(elevation - Input.GetAxis("Mouse Y") * orbitSpeed, -10f, 85f);
         }
 
-        Vector3 desired = DesiredPosition();
-        transform.position = Vector3.SmoothDamp(transform.position, desired, ref velocity, followSmoothTime);
-        transform.LookAt(target.position, Vector3.up);
+        transform.position = Vector3.SmoothDamp(transform.position, DesiredPosition(), ref velocity, followSmoothTime);
+        ApplyLook();
     }
 
-    Vector3 DesiredPosition()
+    // "Up" in this game is away from the planet centre, so the horizon stays level.
+    Vector3 RadialUp()
     {
-        Quaternion rot = Quaternion.Euler(pitch, yaw, 0f);
-        return target.position + rot * Vector3.back * distance;
+        if (planet != null)
+        {
+            Vector3 r = target.position - planet.transform.position;
+            if (r.sqrMagnitude > 1e-4f) return r.normalized;
+        }
+        return Vector3.up;
     }
+
+    // Direction from the rocket to the camera, built in the planet-relative frame from yaw + elevation.
+    Vector3 CamDir()
+    {
+        Vector3 up = RadialUp();
+        Vector3 baseTangent = Vector3.Cross(up, Vector3.up);
+        if (baseTangent.sqrMagnitude < 1e-4f) baseTangent = Vector3.Cross(up, Vector3.forward); // rocket over a pole
+        baseTangent.Normalize();
+        Vector3 tangent = Quaternion.AngleAxis(yaw, up) * baseTangent;   // around the rocket at horizon level
+        Vector3 tiltAxis = Vector3.Cross(tangent, up).normalized;        // axis to lift the camera up
+        return Quaternion.AngleAxis(elevation, tiltAxis) * tangent;      // raise above the local horizon
+    }
+
+    Vector3 DesiredPosition() => target.position + CamDir() * distance;
+
+    void ApplyLook() => transform.rotation = Quaternion.LookRotation(target.position - transform.position, RadialUp());
 }
