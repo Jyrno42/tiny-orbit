@@ -21,6 +21,7 @@ public class OrbitHUD : MonoBehaviour
 
     GUIStyle title, label, value, status, btn;
     Texture2D px;
+    float groundClearance; // altitude of the lowest part above the surface (cached each frame)
 
     void Awake()
     {
@@ -33,6 +34,21 @@ public class OrbitHUD : MonoBehaviour
         px = new Texture2D(1, 1);
         px.SetPixel(0, 0, Color.white);
         px.Apply();
+    }
+
+    // Recompute the true ground clearance once per frame (cheap enough; OnGUI runs twice a frame).
+    void Update()
+    {
+        if (rocket == null || planet == null) return;
+        Vector3 centre = planet.transform.position;
+        float min = (rocket.position - centre).magnitude; // fallback if no colliders
+        foreach (var c in rocket.GetComponentsInChildren<Collider>())
+        {
+            if (!c.enabled) continue;
+            float d = (c.ClosestPoint(centre) - centre).magnitude; // nearest point on this part to the planet centre
+            if (d < min) min = d;
+        }
+        groundClearance = min - planet.radius;
     }
 
     void EnsureStyles()
@@ -62,12 +78,16 @@ public class OrbitHUD : MonoBehaviour
         float R = planet.radius;
         float throttle = controller != null ? controller.throttle : 0f;
 
+        // Surface altitude from whatever part is actually lowest (works at any attitude - upside
+        // down, sideways, tumbling). Reads ~0 on the ground and goes negative below the surface.
+        float surfaceAlt = groundClearance;
+
         const float W = 320f;
         GUILayout.BeginArea(new Rect(16, 16, W, 620), GUI.skin.box);
         GUILayout.Label("TINY ORBIT", title);
         Sep();
 
-        Row("Altitude", $"{(o.radius - R):N0} m");
+        Row("Altitude", $"{surfaceAlt:N0} m");
         Row("Speed", $"{o.speed:N1} m/s");
         Row("  Vertical", $"{vVert:+0.0;-0.0;0.0} m/s");
         Row("  Horizontal", $"{vHorz:N1} m/s");
