@@ -16,6 +16,9 @@ public class OrbitHUD : MonoBehaviour
     [Tooltip("Optional throttle source for the throttle readout.")]
     public RocketController controller;
 
+    [Tooltip("Optional parachute for the chute-state readout.")]
+    public Parachute parachute;
+
     GUIStyle label, status;
 
     void Awake()
@@ -27,6 +30,9 @@ public class OrbitHUD : MonoBehaviour
             if (rc != null) { rocket = rc.GetComponent<Rigidbody>(); controller = rc; }
         }
         if (controller == null && rocket != null) controller = rocket.GetComponent<RocketController>();
+        if (parachute == null)
+            parachute = controller != null && controller.parachute != null
+                ? controller.parachute : FindObjectOfType<Parachute>();
     }
 
     void OnGUI()
@@ -47,10 +53,15 @@ public class OrbitHUD : MonoBehaviour
         float R = planet.radius;
         float throttle = controller != null ? controller.throttle : 0f;
 
-        GUILayout.BeginArea(new Rect(16, 16, 340, 260), GUI.skin.box);
+        GUILayout.BeginArea(new Rect(16, 16, 340, 340), GUI.skin.box);
         GUILayout.Label($"<b>Altitude</b>   {(o.radius - R):N0} m", label);
         GUILayout.Label($"<b>Speed</b>      {o.speed:N1} m/s", label);
         GUILayout.Label($"<b>Throttle</b>   {(throttle * 100f):N0} %", label);
+        if (controller != null && controller.StageCount > 0)
+            GUILayout.Label($"<b>Stage</b>      {controller.ActiveStageNumber}/{controller.StageCount}" +
+                            $"   fuel {(controller.ActiveFuelFraction * 100f):N0} %", label);
+        if (parachute != null)
+            GUILayout.Label($"<b>Chute</b>      {parachute.state}", label);
         GUILayout.Space(6);
         GUILayout.Label($"<b>Apoapsis</b>   {FmtAlt(o.ra, R, o.bound)}", label);
         GUILayout.Label($"<b>Periapsis</b>  {FmtAlt(o.rp, R, true)}", label);

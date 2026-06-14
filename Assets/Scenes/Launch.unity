@@ -178,7 +178,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 8000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -224,7 +224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25ad67bd173aeafa7b1592021d1fd2d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowCamera
-  target: {fileID: 666735167}
+  target: {fileID: 6146584253736554908}
+  planet: {fileID: 0}
   distance: 25
   minDistance: 8
   maxDistance: 400
@@ -232,12 +233,7 @@ MonoBehaviour:
   followSmoothTime: 0.2
   orbitSpeed: 3
   yaw: 20
-  pitch: 12
---- !u!4 &666735167 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6191697242277191315, guid: 719e820978ef017898923ceaebd2c60b, type: 3}
-  m_PrefabInstance: {fileID: 45139376862695183}
-  m_PrefabAsset: {fileID: 0}
+  elevation: 18
 --- !u!1 &1195347023
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,6 +490,7 @@ MonoBehaviour:
   planet: {fileID: 0}
   rocket: {fileID: 0}
   controller: {fileID: 0}
+  parachute: {fileID: 0}
 --- !u!4 &1454502639
 Transform:
   m_ObjectHideFlags: 0
@@ -509,7 +506,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &45139376862695183
+--- !u!4 &6146584253736554908 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6191697242277191315, guid: 719e820978ef017898923ceaebd2c60b, type: 3}
+  m_PrefabInstance: {fileID: 8904844040535021127}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8904844040535021127
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -573,5 +575,5 @@ SceneRoots:
   - {fileID: 1195347028}
   - {fileID: 1347346563}
   - {fileID: 406641294}
-  - {fileID: 45139376862695183}
+  - {fileID: 8904844040535021127}
   - {fileID: 1454502639}
