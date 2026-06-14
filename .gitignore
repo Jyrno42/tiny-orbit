@@ -49,3 +49,10 @@ crashlytics-build.properties
 # OS
 .DS_Store
 Thumbs.db
+
+# MCP-for-Unity tooling artifacts (not game content)
+/Assets/Plugins/
+/Assets/Plugins.meta
+/Packages/com.coplaydev.unity-mcp/
+/Assets/Screenshots/
+/Assets/Screenshots.meta
