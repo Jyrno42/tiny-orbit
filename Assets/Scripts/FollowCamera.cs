@@ -33,11 +33,13 @@ public class FollowCamera : MonoBehaviour
     public float elevation = 18f;
 
     Vector3 velocity; // SmoothDamp state
+    Vector3 frameRef; // parallel-transported azimuth reference (perpendicular to "up")
 
     void Start()
     {
         if (target == null) { GameObject rk = GameObject.Find("Rocket"); if (rk != null) target = rk.transform; }
         if (planet == null) planet = FindObjectOfType<PlanetBody>();
+        frameRef = Vector3.forward; // seed the azimuth reference; CamDir keeps it perpendicular to up
         if (target != null) { transform.position = DesiredPosition(); ApplyLook(); } // snap, no startup glide
     }
 
@@ -77,9 +79,15 @@ public class FollowCamera : MonoBehaviour
     Vector3 CamDir()
     {
         Vector3 up = RadialUp();
-        Vector3 baseTangent = Vector3.Cross(up, Vector3.up);
-        if (baseTangent.sqrMagnitude < 1e-4f) baseTangent = Vector3.Cross(up, Vector3.forward); // rocket over a pole
+        // Parallel-transport the azimuth reference onto the new horizon plane instead of rebuilding
+        // it from world-up each frame. That keeps the frame continuous across the poles (rebuilding
+        // from cross(up, worldUp) flips there and snaps the view around).
+        Vector3 baseTangent = Vector3.ProjectOnPlane(frameRef, up);
+        if (baseTangent.sqrMagnitude < 1e-5f)
+            baseTangent = Vector3.ProjectOnPlane(Mathf.Abs(up.y) < 0.9f ? Vector3.up : Vector3.forward, up);
         baseTangent.Normalize();
+        frameRef = baseTangent; // carry forward for the next frame
+
         Vector3 tangent = Quaternion.AngleAxis(yaw, up) * baseTangent;   // around the rocket at horizon level
         Vector3 tiltAxis = Vector3.Cross(tangent, up).normalized;        // axis to lift the camera up
         return Quaternion.AngleAxis(elevation, tiltAxis) * tangent;      // raise above the local horizon
