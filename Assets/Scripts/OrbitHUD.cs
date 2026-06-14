@@ -38,14 +38,14 @@ public class OrbitHUD : MonoBehaviour
     void EnsureStyles()
     {
         if (label != null) return;
-        title = new GUIStyle(GUI.skin.label) { fontSize = 18, fontStyle = FontStyle.Bold, richText = true };
+        title = new GUIStyle(GUI.skin.label) { fontSize = 22, fontStyle = FontStyle.Bold, richText = true };
         title.normal.textColor = new Color(0.7f, 0.85f, 1f);
-        label = new GUIStyle(GUI.skin.label) { fontSize = 14 };
-        label.normal.textColor = new Color(0.75f, 0.78f, 0.82f);
-        value = new GUIStyle(GUI.skin.label) { fontSize = 14, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleRight };
+        label = new GUIStyle(GUI.skin.label) { fontSize = 17 };
+        label.normal.textColor = new Color(0.78f, 0.81f, 0.85f);
+        value = new GUIStyle(GUI.skin.label) { fontSize = 17, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleRight };
         value.normal.textColor = Color.white;
-        status = new GUIStyle(GUI.skin.label) { fontSize = 24, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
-        btn = new GUIStyle(GUI.skin.button) { fontSize = 14, fontStyle = FontStyle.Bold };
+        status = new GUIStyle(GUI.skin.label) { fontSize = 30, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
+        btn = new GUIStyle(GUI.skin.button) { fontSize = 16, fontStyle = FontStyle.Bold };
     }
 
     void OnGUI()
@@ -62,8 +62,8 @@ public class OrbitHUD : MonoBehaviour
         float R = planet.radius;
         float throttle = controller != null ? controller.throttle : 0f;
 
-        const float W = 270f;
-        GUILayout.BeginArea(new Rect(14, 14, W, 540), GUI.skin.box);
+        const float W = 320f;
+        GUILayout.BeginArea(new Rect(16, 16, W, 620), GUI.skin.box);
         GUILayout.Label("TINY ORBIT", title);
         Sep();
 

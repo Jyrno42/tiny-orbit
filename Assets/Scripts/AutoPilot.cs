@@ -10,11 +10,19 @@ using UnityEngine;
 [RequireComponent(typeof(RocketController))]
 public class AutoPilot : MonoBehaviour
 {
-    public enum Phase { Off, VerticalClimb, GravityTurn, Coast, Circularize, Done }
+    public enum Phase { Off, VerticalClimb, GravityTurn, Coast, Circularize, Orbit, Deorbit, Reentry, Chute, Landed }
 
     [Header("Targets")]
     [Tooltip("Target periapsis/apoapsis altitude to aim for (metres above surface).")]
     public float targetAltitude = 120f;
+
+    [Header("Mission")]
+    [Tooltip("After reaching orbit, deorbit and land under parachute (full demo flight).")]
+    public bool landAfterOrbit = true;
+    [Tooltip("Seconds to coast in orbit before the deorbit burn.")]
+    public float orbitHoldTime = 4f;
+    [Tooltip("Altitude to deploy the parachute on the way down.")]
+    public float chuteAltitude = 250f;
 
     [Header("Gravity turn")]
     [Tooltip("Altitude to begin pitching over.")]
@@ -37,6 +45,7 @@ public class AutoPilot : MonoBehaviour
     Rigidbody rb;
     PlanetBody planet;
     Vector3 turnTangent; // fixed downrange direction chosen at turn start
+    float orbitHold;     // time spent coasting in orbit before deorbit
 
     [System.NonSerialized] public string trace = ""; // mission trajectory log for debugging
     float logT;
@@ -107,11 +116,41 @@ public class AutoPilot : MonoBehaviour
                 // descending and would drive the rocket into the terrain after a missed apoapsis.
                 targetUp = Downrange(radialOut);
                 throttle = Mathf.Clamp01((targetAltitude - peAlt) / 50f) * 0.6f;
-                if (o.isOrbit && peAlt >= targetAltitude * 0.6f) { throttle = 0f; phase = Phase.Done; }
-                if (rc.ActiveStage == null || !rc.ActiveStage.HasFuel) phase = Phase.Done; // out of fuel
+                if (o.isOrbit && peAlt >= targetAltitude * 0.6f) { throttle = 0f; phase = Phase.Orbit; orbitHold = 0f; }
+                if (rc.ActiveStage == null || !rc.ActiveStage.HasFuel) { phase = Phase.Orbit; orbitHold = 0f; }
                 break;
 
-            case Phase.Done:
+            case Phase.Orbit:
+                // coast in orbit for a beat, then begin the descent (if landing is enabled)
+                throttle = 0f;
+                targetUp = Downrange(radialOut);
+                orbitHold += Time.fixedDeltaTime;
+                if (landAfterOrbit && orbitHold >= orbitHoldTime) phase = Phase.Deorbit;
+                break;
+
+            case Phase.Deorbit:
+                // brake retrograde to drop periapsis below the surface so we reenter
+                targetUp = -rb.linearVelocity.normalized;
+                throttle = 0.7f;
+                if (peAlt < -20f) phase = Phase.Reentry;
+                if (rc.ActiveStage == null || !rc.ActiveStage.HasFuel) phase = Phase.Reentry; // burned what we had
+                break;
+
+            case Phase.Reentry:
+                // fall, nose up, so the canopy ends up on top for the landing
+                throttle = 0f;
+                targetUp = radialOut;
+                if (alt < chuteAltitude && radialVel < 0f) phase = Phase.Chute;
+                break;
+
+            case Phase.Chute:
+                throttle = 0f;
+                targetUp = radialOut;
+                if (rc.parachute != null) rc.parachute.Deploy(); // idempotent: only fires from Stowed
+                if (alt < 3f && o.speed < 2f) phase = Phase.Landed;
+                break;
+
+            case Phase.Landed:
             default:
                 throttle = 0f;
                 targetUp = radialOut;

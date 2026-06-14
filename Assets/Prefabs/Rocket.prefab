@@ -899,8 +899,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac10d5ab55246cca8aae79bc029c8bab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FuelTank
-  maxFuel: 50
-  fuel: 50
+  maxFuel: 80
+  fuel: 80
 --- !u!1 &3360366271088870303
 GameObject:
   m_ObjectHideFlags: 0
@@ -1714,7 +1714,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 5
   m_LinearDamping: 0
-  m_AngularDamping: 1.5
+  m_AngularDamping: 3
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1762,8 +1762,9 @@ MonoBehaviour:
   - {fileID: 2979783359597906919}
   - {fileID: 4261789181822746222}
   activeStage: 0
-  torquePower: 15
-  angularDrag: 1.5
+  torquePower: 12
+  angularDrag: 3
+  controlResponse: 3.5
   parachute: {fileID: 8409869222183166956}
 --- !u!114 &4706766912887030931
 MonoBehaviour:
@@ -1778,6 +1779,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoPilot
   targetAltitude: 200
+  landAfterOrbit: 1
+  orbitHoldTime: 4
+  chuteAltitude: 250
   turnStartAlt: 25
   turnEndAlt: 180
   maxTurn: 0.55

@@ -20,9 +20,11 @@ public class RocketController : MonoBehaviour
     public int activeStage = 0;
 
     [Header("Reaction wheels")]
-    public float torquePower = 15f;
-    [Tooltip("Angular drag so the rocket settles when steering keys are released.")]
-    public float angularDrag = 1.5f;
+    public float torquePower = 12f;
+    [Tooltip("Rotational drag - higher = heavier, less twitchy turns that settle quickly.")]
+    public float angularDrag = 3f;
+    [Tooltip("How fast control input spools up/down (units/sec). Lower = weightier, less instant.")]
+    public float controlResponse = 3.5f;
 
     [Header("Recovery")]
     public Parachute parachute;
@@ -69,7 +71,9 @@ public class RocketController : MonoBehaviour
         float pitch = (Input.GetKey(KeyCode.W) ? 1f : 0f) - (Input.GetKey(KeyCode.S) ? 1f : 0f);
         float yaw   = (Input.GetKey(KeyCode.D) ? 1f : 0f) - (Input.GetKey(KeyCode.A) ? 1f : 0f);
         float roll  = (Input.GetKey(KeyCode.Q) ? 1f : 0f) - (Input.GetKey(KeyCode.E) ? 1f : 0f);
-        steerTorque = new Vector3(pitch, roll, yaw); // X=pitch, Y=roll(nose axis), Z=yaw
+        // spool control input in/out so reaction wheels feel weighty rather than instant
+        Vector3 steerInput = new Vector3(pitch, roll, yaw); // X=pitch, Y=roll(nose axis), Z=yaw
+        steerTorque = Vector3.MoveTowards(steerTorque, steerInput, controlResponse * Time.deltaTime);
 
         // --- Staging / recovery / reset ---
         if (Input.GetKeyDown(KeyCode.Space)) Jettison();
