@@ -861,6 +861,7 @@ GameObject:
   - component: {fileID: 6191697242277191315}
   - component: {fileID: 1378262844659280579}
   - component: {fileID: 19629682805570954}
+  - component: {fileID: 7354605356454105780}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Untagged
@@ -899,9 +900,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9059712154894034761}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 5
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 1.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -913,11 +914,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &19629682805570954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -931,3 +932,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityReceiver
   planet: {fileID: 0}
+--- !u!114 &7354605356454105780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9059712154894034761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58bf1824fede820ccbe2937919ba5503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RocketController
+  maxThrust: 120
+  thrustPoint: {fileID: 3335690518520126706}
+  throttle: 0
+  throttleRate: 1
+  torquePower: 15
+  angularDrag: 1.5
