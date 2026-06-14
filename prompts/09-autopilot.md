@@ -53,3 +53,7 @@ indicator.
   indicator showing the current multiplier (hidden at 1x), and resets to 1x at
   mission end and on Stop.
 - A verified good run reached roughly Pe 120 / Ap 791 with fuel to spare.
+
+## Run 2 learnings
+- The autopilot must burn each lower stage to depletion at FULL throttle before it stages. A feathered/throttle-limited ascent leaves fuel in the booster, so the "tank empty" stage trigger never fires and the rocket never decouples. Size the booster fuel and the apoapsis target so the booster runs dry mid-ascent and decouples cleanly (Ap ~800 / Pe ~128 worked).
+- Self-inflicted landing artifact: with boosters left in the world, the returning capsule can touch down on a spent booster and read as hovering. Despawn boosters after separation (see Phase 6).

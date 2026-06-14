@@ -56,3 +56,7 @@ throttle-driven engine exhaust plume on the firing stage.
 - The active engine shows a continuous throttle-driven flame (bright core fading
   to red), zero at no throttle, only on the fueled stage, and it survives a
   Stop/Play cycle (because it is built at runtime, not baked into the prefab).
+
+## Run 2 learnings
+- Texture the planet with SEAMLESS noise: sample the noise by 3D world-space direction (the surface normal), NOT by UV coordinates, so there are no grid lines or pole/UV seams. Suggested look: blue oceans, green/tan continents, white ice caps, matte (non-glossy) material.
+- CRITICAL material/texture ref: assign the SAVED texture asset to the material, never a transient runtime-generated texture. A material pointing at a transient texture serializes as a null/white reference and the planet renders washed-out white. Generate the texture, save it as an asset, assign that asset, and read the material's texture ref back to confirm it persisted.

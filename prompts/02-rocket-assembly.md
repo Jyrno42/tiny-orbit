@@ -39,3 +39,6 @@ launchpad.
 
 ## Build-session learnings
 - After creating the Rigidbody, READ its properties back and confirm mass=5, useGravity=false, collisionDetectionMode=Continuous, interpolation=Interpolate. Create-time props are unreliable on this MCP and silently revert to defaults (mass=1, useGravity=true, Discrete). At mass 5 and maxThrust 120 full-throttle TWR is ~2.45 (climb ~15 m/s^2); if it shoots up many km in seconds, mass reverted to 1 (TWR ~12).
+
+## Run 2 learnings
+- Give the rocket a FLAT BOX collider at the base for a stable stance, not a capsule collider. A capsule collider makes the rocket tip over on the pad. Keep the box wide enough that it rests upright.

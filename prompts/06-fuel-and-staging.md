@@ -36,3 +36,6 @@ to drop dead mass - the last bit of KSP flavour.
 
 ## Build-session learnings
 - Size upper-stage fuel with margin for a deorbit burn, not just circularization (~80 units worked). A budget that just reaches orbit leaves nothing for the retrograde deorbit, so the full autopilot mission cannot complete.
+
+## Run 2 learnings
+- Despawn spent boosters ~30s after separation (Destroy the jettisoned stage on a timer). Otherwise the descending capsule can land on its own jettisoned booster and appear to hover above the ground.
