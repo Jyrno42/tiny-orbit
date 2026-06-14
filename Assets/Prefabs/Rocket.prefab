@@ -1192,6 +1192,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2235171332228444888}
+  - component: {fileID: 3462330953251696349}
   m_Layer: 0
   m_Name: ThrustPoint2
   m_TagString: Untagged
@@ -1214,6 +1215,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8717617912857996802}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3462330953251696349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8380786212620595773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca495ecd46a858d6971e7dfc16d1bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnginePlume
+  controller: {fileID: 8691046806364874186}
+  stage: {fileID: 6773256133867916946}
+  maxRate: 240
+  nozzleRadius: 0.32
+  speedRange: {x: 6, y: 13}
+  lifetimeRange: {x: 0.6, y: 1.1}
+  sizeMul: 0.9
+  emitEuler: {x: 90, y: 0, z: 0}
 --- !u!1 &8445821172144827918
 GameObject:
   m_ObjectHideFlags: 0
@@ -1223,6 +1244,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 949705862460491261}
+  - component: {fileID: 1236390330417759086}
   m_Layer: 0
   m_Name: ThrustPoint1
   m_TagString: Untagged
@@ -1245,6 +1267,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4831099908374444844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1236390330417759086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8445821172144827918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca495ecd46a858d6971e7dfc16d1bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnginePlume
+  controller: {fileID: 8691046806364874186}
+  stage: {fileID: 9011770710040847587}
+  maxRate: 320
+  nozzleRadius: 0.4
+  speedRange: {x: 6, y: 13}
+  lifetimeRange: {x: 0.6, y: 1.1}
+  sizeMul: 1.1
+  emitEuler: {x: 90, y: 0, z: 0}
 --- !u!1 &8453507404193375947
 GameObject:
   m_ObjectHideFlags: 0
