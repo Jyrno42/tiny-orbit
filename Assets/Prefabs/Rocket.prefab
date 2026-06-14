@@ -683,6 +683,7 @@ GameObject:
   - component: {fileID: 8691046806364874186}
   - component: {fileID: 7776276612463177646}
   - component: {fileID: 238482290147924077}
+  - component: {fileID: 4082516432903057492}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Untagged
@@ -802,11 +803,45 @@ MonoBehaviour:
   state: 0
   rb: {fileID: 3019652764456029004}
   canopy: {fileID: 3350512494868589687}
-  dragCoeff: 2.5
-  maxDragForce: 45
-  deployTime: 1.5
+  dragCoeff: 3.5
+  maxDragForce: 140
+  deployTime: 1.6
   deployMaxAltitude: 100000
   touchdownClearance: 0.6
+--- !u!114 &4082516432903057492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3852632134734747905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7f7e874666b38008de3b58f7ac21fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoPilot
+  controller: {fileID: 8691046806364874186}
+  parachute: {fileID: 238482290147924077}
+  phase: 0
+  gravityTurnStartAlt: 35
+  gravityTurnEndAlt: 420
+  maxTurnDeg: 60
+  apoapsisTargetAlt: 320
+  apoapsisFeather: 160
+  circThrottleCap: 0.6
+  periapsisTargetAlt: 110
+  periapsisFeather: 120
+  escapeGuardFrac: 0.96
+  deorbitThrottle: 0.5
+  deorbitPeTargetAlt: -60
+  chuteDeployAlt: 240
+  groundSafetyAlt: 30
+  kP: 7
+  kD: 3.5
+  maxAngAccel: 25
+  warpCoast: 4
+  coastWarpDelay: 4
+  anticipateVSpeed: 12
 --- !u!1 &5576839932345604431
 GameObject:
   m_ObjectHideFlags: 0
