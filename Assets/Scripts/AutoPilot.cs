@@ -144,8 +144,12 @@ public class AutoPilot : MonoBehaviour
                 float f = Mathf.Clamp01((Alt - gravityTurnStartAlt) / (gravityTurnEndAlt - gravityTurnStartAlt));
                 float turn = f * maxTurnDeg;
                 steer = Quaternion.AngleAxis(turn, Vector3.Cross(RadialUp, Tangent())) * RadialUp;
-                // feather throttle so apoapsis creeps to target, with hard escape guard
-                thr = escapeGuard ? 0f : Mathf.Clamp01((apoapsisTargetAlt - apAlt) / apoapsisFeather);
+                // Burn lower stages to depletion at full throttle (so they actually decouple);
+                // only the final stage feathers its throttle toward the apoapsis target.
+                bool lastStage = controller.ActiveStageNumber >= controller.StageCount;
+                if (escapeGuard) thr = 0f;
+                else if (!lastStage) thr = 1f;
+                else thr = Mathf.Clamp01((apoapsisTargetAlt - apAlt) / apoapsisFeather);
                 if (controller.ActiveStage != null && controller.ActiveStage.tank.IsEmpty)
                     controller.Jettison();
                 if (apAlt >= apoapsisTargetAlt || escapeGuard) { phase = Phase.CoastToApoapsis; cutoffTime = Time.time; }

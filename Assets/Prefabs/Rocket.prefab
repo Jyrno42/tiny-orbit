@@ -826,7 +826,7 @@ MonoBehaviour:
   gravityTurnStartAlt: 35
   gravityTurnEndAlt: 420
   maxTurnDeg: 60
-  apoapsisTargetAlt: 320
+  apoapsisTargetAlt: 800
   apoapsisFeather: 160
   circThrottleCap: 0.6
   periapsisTargetAlt: 110
@@ -945,8 +945,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de68aef433243115aa3d77af2a06a011, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FuelTank
-  maxFuel: 100
-  fuel: 100
+  maxFuel: 18
+  fuel: 18
 --- !u!1 &5949251254533135595
 GameObject:
   m_ObjectHideFlags: 0
