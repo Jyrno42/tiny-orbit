@@ -8,7 +8,7 @@ models plan and build it from the same starting point.
 - Model that produced the initial plan: Claude Opus 4.8 (1M context).
 - Tooling: Claude Code CLI (VSCode extension).
 - Date: 2026-06-14.
-- Working dir: `/home/jyrno42/projects/gameprojects/ai-test/opus`
+- Working dir: `/home/jyrno42/projects/gameprojects/ai-test/opus/tiny-orbit`
 - Output: `README.md`, `PLAN.md`, `TODO.md`, `.gitignore`, `prompts/00..07`.
 
 ## Prompt 1 (initial request)
