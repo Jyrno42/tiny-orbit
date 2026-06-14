@@ -1780,7 +1780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AutoPilot
   targetAltitude: 200
   landAfterOrbit: 1
-  orbitHoldTime: 4
+  lapsBeforeDeorbit: 1
   chuteAltitude: 250
   turnStartAlt: 25
   turnEndAlt: 180

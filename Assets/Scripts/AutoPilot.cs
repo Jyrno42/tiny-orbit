@@ -19,8 +19,8 @@ public class AutoPilot : MonoBehaviour
     [Header("Mission")]
     [Tooltip("After reaching orbit, deorbit and land under parachute (full demo flight).")]
     public bool landAfterOrbit = true;
-    [Tooltip("Seconds to coast in orbit before the deorbit burn.")]
-    public float orbitHoldTime = 4f;
+    [Tooltip("Number of full orbits to complete before the deorbit burn.")]
+    public int lapsBeforeDeorbit = 1;
     [Tooltip("Altitude to deploy the parachute on the way down.")]
     public float chuteAltitude = 250f;
 
@@ -45,7 +45,8 @@ public class AutoPilot : MonoBehaviour
     Rigidbody rb;
     PlanetBody planet;
     Vector3 turnTangent; // fixed downrange direction chosen at turn start
-    float orbitHold;     // time spent coasting in orbit before deorbit
+    float sweptAngle;    // degrees swept around the planet since reaching orbit (for lap counting)
+    Vector3 prevRadial;  // previous radial direction
 
     [System.NonSerialized] public string trace = ""; // mission trajectory log for debugging
     float logT;
@@ -116,16 +117,17 @@ public class AutoPilot : MonoBehaviour
                 // descending and would drive the rocket into the terrain after a missed apoapsis.
                 targetUp = Downrange(radialOut);
                 throttle = Mathf.Clamp01((targetAltitude - peAlt) / 50f) * 0.6f;
-                if (o.isOrbit && peAlt >= targetAltitude * 0.6f) { throttle = 0f; phase = Phase.Orbit; orbitHold = 0f; }
-                if (rc.ActiveStage == null || !rc.ActiveStage.HasFuel) { phase = Phase.Orbit; orbitHold = 0f; }
+                if (o.isOrbit && peAlt >= targetAltitude * 0.6f) { throttle = 0f; phase = Phase.Orbit; sweptAngle = 0f; prevRadial = radialOut; }
+                if (rc.ActiveStage == null || !rc.ActiveStage.HasFuel) { phase = Phase.Orbit; sweptAngle = 0f; prevRadial = radialOut; }
                 break;
 
             case Phase.Orbit:
-                // coast in orbit for a beat, then begin the descent (if landing is enabled)
+                // coast a full lap (or more) around the planet, then begin the descent
                 throttle = 0f;
                 targetUp = Downrange(radialOut);
-                orbitHold += Time.fixedDeltaTime;
-                if (landAfterOrbit && orbitHold >= orbitHoldTime) phase = Phase.Deorbit;
+                sweptAngle += Vector3.Angle(prevRadial, radialOut);
+                prevRadial = radialOut;
+                if (landAfterOrbit && sweptAngle >= 360f * Mathf.Max(1, lapsBeforeDeorbit)) phase = Phase.Deorbit;
                 break;
 
             case Phase.Deorbit:
