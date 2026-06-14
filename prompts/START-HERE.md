@@ -1,0 +1,52 @@
+# START HERE - kickoff prompt for a build session
+
+Paste the block below as the first message in a fresh Claude Code session that
+has the Unity MCP connected. It points the session at this repo and the plan, and
+starts the build. (Setup notes for the MCP itself are at the bottom.)
+
+---
+
+> Work in this repo: `/home/jyrno42/projects/gameprojects/ai-test/opus/tiny-orbit`
+> (a git repo and a Unity 6000.4.11f1 project that's open in the editor). The Unity
+> MCP (CoplayDev `UnityMCP`, HTTP on 127.0.0.1:8080) is connected - use it to build
+> directly in the editor.
+>
+> Read `PLAN.md` and the `prompts/` folder first - they define a tiny KSP-style
+> demo called Tiny Orbit (fly a primitive-built rocket into orbit around one
+> planet). `Assets/Scripts/` already has `FrustumMesh.cs` and `LatheMesh.cs` for
+> procedural rocket parts.
+>
+> Then start building, working the phases in order:
+> 1. Phase 0/1 first: create the `Launch` scene, add the `PlanetBody` (R=600,
+>    g0=9.81, mu=g0*R^2) and `GravityReceiver` scripts, the planet sphere, and
+>    verify inverse-square gravity by dropping a test Rigidbody and checking it
+>    falls toward the planet centre.
+> 2. After each phase: check the Unity console for errors via the MCP, confirm the
+>    scene looks right, then `git add -A && git commit` (include the `.meta` files
+>    Unity generates). Single-line commit messages, no `Co-Authored-By` trailer,
+>    no em-dashes anywhere.
+> 3. Pause after Phase 1 and show me the result before continuing to the rocket.
+>
+> Use the MCP to create GameObjects/components and write scripts; don't just hand
+> me code to paste.
+
+---
+
+## Notes
+- The prompt stops after Phase 1 so gravity can be sanity-checked before the whole
+  rocket is built. Remove that line to let it run straight through.
+- It only references committed files, so a fresh session has full context from the
+  repo without any prior chat history.
+
+## MCP setup recap (if the connection is ever lost)
+- Use CoplayDev's MCP for Unity, not the official Unity AI Assistant relay - the
+  official one (com.unity.ai.assistant 2.7-2.12) has a sticky "Connection revoked"
+  bug that downgrading to 2.6.0 and re-approving did not fix on this machine.
+- Unity package: `com.coplaydev.unity-mcp` (git URL in `Packages/manifest.json`).
+- In Unity: Window > MCP for Unity, then Auto-Setup / Configure for Claude Code.
+  It runs a Python server over HTTP on 127.0.0.1:8080.
+- Registered with Claude Code as `UnityMCP` (user scope):
+  `{ "type": "http", "url": "http://127.0.0.1:8080/mcp" }`.
+- MCP servers attach at session start, so restart the Claude Code session after
+  registering. Its tools are `manage_gameobject`, `manage_script`, `manage_scene`,
+  `read_console`, etc.
