@@ -13,21 +13,27 @@ models plan and build it from the same starting point.
 
 ## Prompt 1 (initial request)
 
-> I want to make a super simple ksp style space game with unity. Lets make a
-> prompt for a basic demo where one can fly a rocket (built from basic shapes,
-> ciliders and conic cilinders etc) and put it on orbit.
->
-> Create plan and prompts for it and make this folder a git repo so plans are
-> checked in and theres a generic todolist to track stuff.
+```
+I want to make a super simple ksp style space game with unity. Lets make a
+prompt for a basic demo where one can fly a rocket (built from basic shapes,
+ciliders and conic cilinders etc) and put it on orbit.
+
+Create plan and prompts for it and make this folder a git repo so plans are
+checked in and theres a generic todolist to track stuff.
+```
 
 ## Prompt 2 (follow-up, mid-task)
 
-> stack separator and heat shield and parachute too
+```
+stack separator and heat shield and parachute too
+```
 
 ## Prompt 3 (follow-up)
 
-> also please log initial prompt i gave for rebuild purposes with further ai
-> advancements and to test out how local models can plan / build this too later
+```
+also please log initial prompt i gave for rebuild purposes with further ai
+advancements and to test out how local models can plan / build this too later
+```
 
 ## How to reproduce / benchmark
 1. Start in an empty folder with another model (local or otherwise).
