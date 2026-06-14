@@ -42,3 +42,10 @@ The original human prompts that produced this repo are recorded verbatim in
 - Unity 2022.3 LTS or newer (Built-in or URP - either is fine).
 - C# / MonoBehaviour scripts.
 - Desktop keyboard + mouse input.
+
+## Benchmark workspace (branch-per-run)
+
+This repo doubles as a benchmark harness. `main` holds the recipe + a clean,
+pre-configured Unity project; each build attempt lives on a `run/<model>-<date>`
+branch. See [RUNS.md](RUNS.md) for how to start a run, view a run's results, and
+the log of runs so far. Helper: `./scripts/new-run.sh <model>-<date>`.
