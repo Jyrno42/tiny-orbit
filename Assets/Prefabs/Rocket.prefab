@@ -5263,6 +5263,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnginePlume
   controller: {fileID: 0}
   stage: {fileID: 0}
+  maxRate: 240
+  nozzleRadius: 0.45
+  speedRange: {x: 3, y: 7}
+  lifetimeRange: {x: 0.6, y: 1}
+  sizeMul: {x: 1.1, y: 2}
 --- !u!1 &1310114890626421273
 GameObject:
   m_ObjectHideFlags: 0
@@ -11389,6 +11394,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnginePlume
   controller: {fileID: 0}
   stage: {fileID: 0}
+  maxRate: 300
+  nozzleRadius: 0.62
+  speedRange: {x: 3, y: 7}
+  lifetimeRange: {x: 0.6, y: 1}
+  sizeMul: {x: 1.1, y: 2}
 --- !u!1 &9059712154894034761
 GameObject:
   m_ObjectHideFlags: 0
