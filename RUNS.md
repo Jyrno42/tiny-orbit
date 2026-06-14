@@ -28,6 +28,7 @@ compared against each other and against the prompts on `main`.
 | Branch | Model | Date | Result | Notes |
 |--------|-------|------|--------|-------|
 | `run/opus-4.8-2026-06-14` | Claude Opus 4.8 (1M) | 2026-06-14 | Complete: reaches orbit, full autopilot mission, landing, space visuals | ~20 commits. Needed live feedback for PhysX-off, camera framing, exhaust plume, and autopilot tuning. Those learnings are now folded into the prompts on `main`, so the next run should need far less. |
+| `run/opus-4.8-v2prompts-2026-06-14` | Claude Opus 4.8 (1M) | 2026-06-14 | Complete: orbit (Ap ~800 / Pe ~128), full autopilot mission, landing, textured planet + space visuals | 12 commits (cdbfc02..14cd113), mostly autonomous. The v1 gotchas did NOT recur (PhysX, camera, plume, autopilot tuning were pre-empted by the folded prompts). New bugs hit instead: capsule collider tipped the rocket (fixed with a flat box collider), autopilot never staged (feathered throttle hid the booster's remaining fuel; forced full-throttle depletion), capsule landed on its own spent booster and hovered (boosters now despawn ~30s after separation), and a null material-texture reference washed the planet white. User-requested polish: seamless procedural planet surface and forced mid-ascent staging. |
 
 When you finish a run, add a row here (do it on `main`, or on the run branch and
 cherry-pick), noting model, result, commit count, and where it needed help.
