@@ -767,6 +767,11 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!4 &1629362755 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7959835598211764569, guid: 1d69dfc2c84165c788f34f1305cf9719, type: 3}
+  m_PrefabInstance: {fileID: 4241455517697685317}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1911416218
 Mesh:
   m_ObjectHideFlags: 0
@@ -955,6 +960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1920377847}
   - component: {fileID: 1920377846}
+  - component: {fileID: 1920377848}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1028,6 +1034,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1920377848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920377845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d0ee945243df05cbe6fef8e235e6fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FollowCamera
+  target: {fileID: 1629362755}
+  distance: 25
+  minDistance: 8
+  maxDistance: 400
+  zoomSpeed: 4
+  elevationDeg: 18
+  followSmoothTime: 0.1
+  orbitSensitivity: 4
 --- !u!1001 &4241455517697685317
 PrefabInstance:
   m_ObjectHideFlags: 0
