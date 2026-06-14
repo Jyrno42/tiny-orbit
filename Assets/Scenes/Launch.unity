@@ -205,8 +205,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 406641291}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.02211167, y: -0.32056987, z: 0.007485539, w: 0.9469372}
-  m_LocalPosition: {x: 260, y: 760, z: -340}
+  m_LocalRotation: {x: 0.13849702, y: -0.386054, z: 0.058747165, w: 0.9101262}
+  m_LocalPosition: {x: 1500, y: 650, z: -1450}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -230,7 +230,7 @@ MonoBehaviour:
   minDistance: 8
   maxDistance: 400
   zoomStrength: 3
-  followSmoothTime: 0.2
+  followSmoothTime: 0.1
   orbitSpeed: 3
   yaw: 20
   elevation: 18

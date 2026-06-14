@@ -116,6 +116,17 @@ public class OrbitHUD : MonoBehaviour
         }
 
         GUILayout.EndArea();
+
+        // Time-warp indicator, centred near the top (KSP-style) - only when warping.
+        float ts = Time.timeScale;
+        if (ts > 1.05f)
+        {
+            string w = $"▶▶  {ts:0}×  TIME WARP";
+            var ws = new GUIStyle(status) { fontSize = 22 };
+            ws.normal.textColor = new Color(0.45f, 0.9f, 1f);
+            Vector2 sz = ws.CalcSize(new GUIContent(w));
+            GUI.Label(new Rect((Screen.width - sz.x) * 0.5f, 18f, sz.x + 6f, sz.y), w, ws);
+        }
     }
 
     void Row(string name, string val)

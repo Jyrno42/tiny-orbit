@@ -24,6 +24,12 @@ public class AutoPilot : MonoBehaviour
     [Tooltip("Altitude to deploy the parachute on the way down.")]
     public float chuteAltitude = 250f;
 
+    [Header("Auto time-warp")]
+    [Tooltip("Speed up boring coasts and slow back to real time for launch/burns/landing.")]
+    public bool autoWarp = true;
+    [Tooltip("Maximum warp factor during the orbital coast (lower = smoother camera).")]
+    public float maxWarp = 4f;
+
     [Header("Gravity turn")]
     [Tooltip("Altitude to begin pitching over.")]
     public float turnStartAlt = 15f;
@@ -47,6 +53,7 @@ public class AutoPilot : MonoBehaviour
     Vector3 turnTangent; // fixed downrange direction chosen at turn start
     float sweptAngle;    // degrees swept around the planet since reaching orbit (for lap counting)
     Vector3 prevRadial;  // previous radial direction
+    bool warpManaged;    // true while this autopilot owns Time.timeScale
 
     [System.NonSerialized] public string trace = ""; // mission trajectory log for debugging
     float logT;
@@ -60,12 +67,48 @@ public class AutoPilot : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T)) { engaged = !engaged; phase = engaged ? Phase.VerticalClimb : Phase.Off; }
+        if (Input.GetKeyDown(KeyCode.T)) { if (engaged) Disengage(); else Engage(); }
+        HandleWarp();
     }
 
     /// <summary>Engage from script (used by tests/demos).</summary>
     public void Engage() { engaged = true; phase = Phase.VerticalClimb; trace = ""; logT = 0f; }
     public void Disengage() { engaged = false; phase = Phase.Off; }
+
+    // Auto time-warp: ramp Time.timeScale toward a per-phase target, and hand control back at 1x.
+    void HandleWarp()
+    {
+        if (engaged && autoWarp)
+        {
+            Time.timeScale = Mathf.MoveTowards(Time.timeScale, TargetWarp(), 10f * Time.unscaledDeltaTime);
+            warpManaged = true;
+        }
+        else if (warpManaged)
+        {
+            Time.timeScale = 1f;
+            warpManaged = false;
+        }
+    }
+
+    float TargetWarp()
+    {
+        if (planet == null) return 1f;
+        Vector3 rvec = rb.position - planet.transform.position;
+        float alt = rvec.magnitude - planet.radius;
+        float radialVel = Vector3.Dot(rb.linearVelocity, rvec.normalized);
+        float lapTarget = 360f * Mathf.Max(1, lapsBeforeDeorbit);
+        switch (phase)
+        {
+            // Warp only the pure coasts; drop back to 1x BEFORE each burn so it is clearly visible.
+            case Phase.Coast:   return radialVel > 4f ? 3f : 1f;             // slow as we near apoapsis (circularize next)
+            case Phase.Orbit:   return sweptAngle > lapTarget - 25f ? 1f : maxWarp; // slow just before the deorbit burn
+            case Phase.Reentry: return alt > chuteAltitude + 40f ? maxWarp : 1f;    // warp the fall, slow before the chute
+            case Phase.Chute:   return alt > chuteAltitude - 40f ? 1f : (alt > 60f ? 2f : 1f); // deploy + touchdown at 1x
+            default:            return 1f;  // launch, gravity turn, Circularize burn, Deorbit burn, landed
+        }
+    }
+
+    void OnDisable() { if (warpManaged) { Time.timeScale = 1f; warpManaged = false; } }
 
     void FixedUpdate()
     {

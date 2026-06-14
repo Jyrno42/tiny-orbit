@@ -1782,6 +1782,8 @@ MonoBehaviour:
   landAfterOrbit: 1
   lapsBeforeDeorbit: 1
   chuteAltitude: 250
+  autoWarp: 1
+  maxWarp: 4
   turnStartAlt: 25
   turnEndAlt: 180
   maxTurn: 0.55
