@@ -33,6 +33,10 @@ This repo is **plans and prompts**, not (yet) Unity code. The intended workflow:
    by hand) to implement that slice in Unity.
 3. Track progress in [TODO.md](TODO.md).
 
+The original human prompts that produced this repo are recorded verbatim in
+[PROMPT-LOG.md](PROMPT-LOG.md) for reproducibility and for benchmarking other
+(e.g. local) models on the same task later.
+
 ## Target environment
 
 - Unity 2022.3 LTS or newer (Built-in or URP - either is fine).
