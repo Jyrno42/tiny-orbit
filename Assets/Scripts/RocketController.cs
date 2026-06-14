@@ -21,6 +21,8 @@ public class RocketController : MonoBehaviour
     public float payloadMass = 0.6f;
     [Tooltip("Separation impulse applied to a jettisoned stage.")]
     public float separationImpulse = 8f;
+    [Tooltip("Spent stages despawn this many seconds after jettison, so debris can't become a landing obstacle.")]
+    public float debrisLifetime = 30f;
 
     [Header("Reaction wheels")]
     public float torquePower = 15f;
@@ -130,6 +132,10 @@ public class RocketController : MonoBehaviour
         rb.ResetCenterOfMass();
         rb.ResetInertiaTensor();
         UpdateMass();
+
+        // Despawn the spent stage after it has fallen away, so the returning capsule
+        // never lands on top of its own booster.
+        if (debrisLifetime > 0f) Destroy(drop.gameObject, debrisLifetime);
     }
 
     /// <summary>Snap the (current) rocket back to the launch pose. Does not un-jettison stages.</summary>
