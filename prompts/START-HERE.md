@@ -48,3 +48,10 @@ code to paste.
 - MCP servers attach at session start, so restart the Claude Code session after
   registering. Its tools are `manage_gameobject`, `manage_script`, `manage_scene`,
   `read_console`, etc.
+
+## MCP workflow rules (learned the hard way)
+- Never trust create-time component_properties on this MCP. They silently fall back to defaults (Rigidbody mass/useGravity/collision, camera farClip, collider center/size, particle modules). After creating any component, read the critical properties back and set them explicitly via manage_components set_property or execute_code (set field + EditorUtility.SetDirty + PrefabUtility.ApplyPrefabInstance for prefab parts).
+- Apply scene-level changes (material wiring, camera clear, lighting, skybox, component refs) in EDIT mode, then SaveScene. SaveScene silently fails in play mode, so play-mode changes revert on stop. Asset files (a .mat) persist; scene wiring does not.
+- MCP screenshots are garbled (noise) whenever an OnGUI/IMGUI HUD is on screen or when timeScale=0 (a capture quirk on this headless Linux GL editor, not a code bug). Capture in edit mode with the HUD off, or with a positioned manage_camera view. For live-HUD/plume looks, ask the user to confirm - you cannot screenshot it reliably.
+- ~10-13s of game-time elapses between consecutive MCP calls (the editor runs real time while you think). Do not observe a flight by polling state across calls. Drive timed sequences from an in-game script (the AutoPilot) and add an in-game ring/trace buffer (timestamped alt/speed/Ap/Pe/phase/throttle) read back AFTER the run.
+- Edit-mode retuning does NOT update an already-running play instance - Stop and Play again to pick up new values. Verify math by setting state directly (assign a circular orbit position+velocity, read back Ap/Pe) rather than flying and polling.

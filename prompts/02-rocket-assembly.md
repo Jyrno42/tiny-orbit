@@ -36,3 +36,6 @@ launchpad.
 - The rocket rests on the planet surface without sinking or jittering.
 - Its nose points away from the planet centre (straight up at the launch site).
 - It is a reusable prefab.
+
+## Build-session learnings
+- After creating the Rigidbody, READ its properties back and confirm mass=5, useGravity=false, collisionDetectionMode=Continuous, interpolation=Interpolate. Create-time props are unreliable on this MCP and silently revert to defaults (mass=1, useGravity=true, Discrete). At mass 5 and maxThrust 120 full-throttle TWR is ~2.45 (climb ~15 m/s^2); if it shoots up many km in seconds, mass reverted to 1 (TWR ~12).

@@ -50,3 +50,6 @@ and a parachute for a soft landing.
 - The heat shield stays on the capsule through separation.
 - `P` deploys the parachute, drag ramps in, and the capsule lands slowly instead
   of cratering.
+
+## Build-session learnings
+- On touchdown, cut the parachute and collapse the canopy (scale -> 0); a chute left inflated reads as the craft floating. Detect landing from the craft's lowest part, not the Rigidbody root (root sits ~3m below the engine after staging, so root-based detection stops early or never triggers). Tune chute drag so descent is brisk enough to record (~3 m/s touchdown), not an ~80s drift.

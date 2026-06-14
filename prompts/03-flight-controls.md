@@ -34,3 +34,6 @@ fly and steer the rocket.
 - Full throttle lifts the rocket off the pad.
 - Pitch/yaw/roll keys rotate the rocket and it settles when released.
 - `R` cleanly resets to the launchpad.
+
+## Build-session learnings
+- maxThrust 120 with mass 5 gives TWR ~2.45 - good. Re-verify mass actually stuck (see Phase 2); an un-set mass=1 makes launches violent.

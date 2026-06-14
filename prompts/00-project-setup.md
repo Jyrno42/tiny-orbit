@@ -29,3 +29,7 @@ A blank but well-organized Unity project ready to build the demo into.
 ## Done when
 - Project opens, `Launch` scene exists, folders are in place.
 - `PlanetBody` compiles and `Mu` returns 3,531,600 with default values.
+
+## Build-session learnings
+- Verify the physics backend before anything else: Project Settings > Physics, confirm GameObject SDK / Physics SDK is "PhysX", not "None". It shipped as None on this project, which silently breaks all Rigidbodies (rb.position reads (0,0,0), velocity writes ignored, nothing falls - looks like a gravity-code bug but is not). Enable PhysX and commit the ProjectSettings/DynamicsManager.asset change. Sanity check: enter Play with any Rigidbody and confirm rb.position tracks transform.position.
+- Enable Project Settings > Player > Run In Background (and commit). Without it Unity throttles the editor to ~2 fps when its window is unfocused, which strobes particle effects and makes play-mode observation unreliable.

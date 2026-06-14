@@ -33,3 +33,6 @@ to drop dead mass - the last bit of KSP flavour.
 - `Space` drops the spent stage (you see mass fall away) and the upper engine
   takes over.
 - With staging you can reach orbit you couldn't on one stage.
+
+## Build-session learnings
+- Size upper-stage fuel with margin for a deorbit burn, not just circularization (~80 units worked). A budget that just reaches orbit leaves nothing for the retrograde deorbit, so the full autopilot mission cannot complete.

@@ -64,6 +64,8 @@ Each phase is small, testable on its own, and has a prompt file.
 | 5 | Orbital HUD | [prompts/05-orbital-readout-ui.md](prompts/05-orbital-readout-ui.md) | HUD: altitude, speed, throttle, Ap/Pe; "ORBIT" indicator. |
 | 6 | Fuel & staging | [prompts/06-fuel-and-staging.md](prompts/06-fuel-and-staging.md) | Fuel burn, empty-stage jettison, dry/wet mass. |
 | 7 | Recovery parts | [prompts/07-recovery-parts.md](prompts/07-recovery-parts.md) | Stack separator (decoupler), heat shield, parachute. |
+| 8 | Space visuals | [prompts/08-space-visuals.md](prompts/08-space-visuals.md) | Black sky, Sun + low ambient, procedural starfield, engine exhaust plume. |
+| 9 | Autopilot | [prompts/09-autopilot.md](prompts/09-autopilot.md) | Full autonomous launch-to-land mission with auto time-warp + HUD. |
 
 ### Recommended verification per phase
 - P1: drop a cube near the planet, confirm it falls and accelerates toward centre.
@@ -74,6 +76,10 @@ Each phase is small, testable on its own, and has a prompt file.
 - P6: engine cuts when fuel hits 0; staging drops mass and relights.
 - P7: separator pops the stages apart; parachute deploys and slows descent to a
   survivable landing; heat shield stays on the capsule.
+
+## Build-session learnings (tuning + tight margins)
+- Tight margins: escape speed is only sqrt(2)x circular speed (~90 vs ~71 m/s) and the rocket is over-powered, so full-throttle guidance escapes and the apoapsis dwell is only ~4-5s. Use proportional throttle that feathers as Ap/Pe approach target, cap the circularization burn (~0.6 throttle), target apoapsis ~200m (not ~110) for enough dwell, and add a hard escape-speed guard.
+- Key numeric values: R=600, g0=9.81, mu=3,531,600; mass=5, maxThrust=120 -> TWR 2.45; escape ~ sqrt(2)x circular; apoapsis target ~200m; circularize ~0.6 throttle; upper-stage fuel ~80; camera farClip 8000; time-warp cap 4x (8x jerks the camera), coastWarpDelay ~4s, followSmoothTime 0.1; plume rate ~300, lifetime 0.6-1.1s randomized; chute touchdown ~3 m/s; HUD panel height ~540.
 
 ## Stretch ideas (after the demo works)
 - Thin atmosphere with exponential-density drag and a "safe orbit" altitude line.
