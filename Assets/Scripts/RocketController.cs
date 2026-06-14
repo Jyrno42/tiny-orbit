@@ -106,19 +106,25 @@ public class RocketController : MonoBehaviour
         activeIndex++;
         if (drop == null) { UpdateMass(); return; }
 
-        // Detach and hand the spent stage its own physics so it falls away.
-        drop.transform.SetParent(null, true);
-        var drb = drop.gameObject.AddComponent<Rigidbody>();
-        drb.useGravity = false;
-        drb.mass = Mathf.Max(0.1f, drop.Mass);
-        drb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-        drb.linearVelocity = rb.linearVelocity;
-        drb.angularVelocity = rb.angularVelocity;
-        drop.gameObject.AddComponent<GravityReceiver>();
-
-        // Separation: push the spent stage back along -nose, nudge the rocket forward.
-        drb.AddForce(-transform.up * separationImpulse, ForceMode.Impulse);
-        rb.AddForce(transform.up * separationImpulse * 0.3f, ForceMode.Impulse);
+        if (drop.separator != null)
+        {
+            // Fire the decoupler between this stage and the one above.
+            drop.separator.Separate(rb, drop);
+        }
+        else
+        {
+            // Fallback: detach and hand the spent stage its own physics directly.
+            drop.transform.SetParent(null, true);
+            var drb = drop.gameObject.AddComponent<Rigidbody>();
+            drb.useGravity = false;
+            drb.mass = Mathf.Max(0.1f, drop.Mass);
+            drb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            drb.linearVelocity = rb.linearVelocity;
+            drb.angularVelocity = rb.angularVelocity;
+            drop.gameObject.AddComponent<GravityReceiver>();
+            drb.AddForce(-transform.up * separationImpulse, ForceMode.Impulse);
+            rb.AddForce(transform.up * separationImpulse * 0.3f, ForceMode.Impulse);
+        }
 
         // Mass distribution changed: recompute inertia/COM from the remaining colliders.
         rb.ResetCenterOfMass();

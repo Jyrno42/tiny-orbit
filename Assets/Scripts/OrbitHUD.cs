@@ -10,6 +10,7 @@ public class OrbitHUD : MonoBehaviour
 {
     public Rigidbody rb;
     public RocketController controller;
+    public Parachute parachute;
 
     [Header("Debug telemetry")]
     [Tooltip("Dump the same readout to the console on an interval (handy for headless verification).")]
@@ -26,6 +27,7 @@ public class OrbitHUD : MonoBehaviour
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
         if (controller == null) controller = GetComponent<RocketController>();
+        if (parachute == null) parachute = GetComponent<Parachute>();
         planet = FindObjectOfType<PlanetBody>();
         RefreshColliders();
     }
@@ -67,8 +69,8 @@ public class OrbitHUD : MonoBehaviour
     {
         public float alt, speed, vSpeed, hSpeed, throttle, apAlt, peAlt, e, fuelFrac;
         public int stageNum, stageCount;
-        public bool engineLit;
-        public string status;
+        public bool engineLit, separatorArmed;
+        public string status, chute;
     }
 
     Readout Sample()
@@ -94,7 +96,9 @@ public class OrbitHUD : MonoBehaviour
             var s = controller.ActiveStage;
             o.fuelFrac = (s != null && s.tank != null) ? s.tank.Fraction : 0f;
             o.engineLit = controller.EngineLit;
+            o.separatorArmed = controller.ActiveStageNumber < controller.StageCount;
         }
+        o.chute = parachute != null ? parachute.StateName : "n/a";
         o.status = !el.bound ? "ESCAPE" : (el.isOrbit ? "ORBIT" : "SUBORBITAL");
         return o;
     }
@@ -106,7 +110,7 @@ public class OrbitHUD : MonoBehaviour
         if (Time.time < nextLog) return;
         nextLog = Time.time + logInterval;
         var o = Sample();
-        Debug.Log($"[HUD] {o.status} alt={o.alt:F1} spd={o.speed:F1} (v={o.vSpeed:F1} h={o.hSpeed:F1}) thr={o.throttle*100f:F0}% stg={o.stageNum}/{o.stageCount} fuel={o.fuelFrac*100f:F0}% lit={o.engineLit} Ap={o.apAlt:F1} Pe={o.peAlt:F1} e={o.e:F3}");
+        Debug.Log($"[HUD] {o.status} alt={o.alt:F1} spd={o.speed:F1} (v={o.vSpeed:F1} h={o.hSpeed:F1}) thr={o.throttle*100f:F0}% stg={o.stageNum}/{o.stageCount} fuel={o.fuelFrac*100f:F0}% lit={o.engineLit} chute={o.chute} Ap={o.apAlt:F1} Pe={o.peAlt:F1} e={o.e:F3}");
     }
 
     static string Alt(float a) => float.IsInfinity(a) ? "---" : a.ToString("N0") + " m";
@@ -119,7 +123,7 @@ public class OrbitHUD : MonoBehaviour
 
         float w = 360f, x = 14f, y = 14f, pad = 14f;
         float lh = label.fontSize * 1.5f;
-        float panelH = lh * 14f;
+        float panelH = lh * 15.5f;
         GUI.DrawTexture(new Rect(x, y, w, panelH), panelTex);
 
         float cx = x + pad, cy = y + pad, cw = w - pad * 2f;
@@ -138,7 +142,8 @@ public class OrbitHUD : MonoBehaviour
         Row(ref cy, cx, cw, lh, "Apoapsis", Alt(o.apAlt));
         Row(ref cy, cx, cw, lh, "Periapsis", Alt(o.peAlt));
         Row(ref cy, cx, cw, lh, "Eccentricity", o.e.ToString("F3"));
-        Row(ref cy, cx, cw, lh, "Stage", o.stageNum + " / " + o.stageCount + (o.engineLit ? "  (lit)" : ""));
+        Row(ref cy, cx, cw, lh, "Stage", o.stageNum + " / " + o.stageCount + (o.engineLit ? "  (lit)" : "") + (o.separatorArmed ? "  [decoupler armed]" : ""));
+        Row(ref cy, cx, cw, lh, "Parachute", o.chute);
 
         Bar(ref cy, cx, cw, lh, "Throttle", o.throttle, barFill);
         Bar(ref cy, cx, cw, lh, "Fuel", o.fuelFrac, fuelFill);

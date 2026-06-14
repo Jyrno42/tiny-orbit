@@ -13,6 +13,9 @@ public class Stage : MonoBehaviour
     [Tooltip("On-axis point where thrust is applied (and exhaust emitted).")]
     public Transform thrustPoint;
 
+    [Tooltip("Decoupler that releases this stage when it is jettisoned (optional).")]
+    public StackSeparator separator;
+
     [Tooltip("Engine force at full throttle.")]
     public float maxThrust = 120f;
 
