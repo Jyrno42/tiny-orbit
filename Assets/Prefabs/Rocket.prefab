@@ -1784,6 +1784,7 @@ MonoBehaviour:
   chuteAltitude: 250
   autoWarp: 1
   maxWarp: 4
+  coastWarpDelay: 4
   turnStartAlt: 25
   turnEndAlt: 180
   maxTurn: 0.55

@@ -29,6 +29,8 @@ public class AutoPilot : MonoBehaviour
     public bool autoWarp = true;
     [Tooltip("Maximum warp factor during the orbital coast (lower = smoother camera).")]
     public float maxWarp = 4f;
+    [Tooltip("Seconds to stay at 1x after engine cutoff before warping the ascent coast.")]
+    public float coastWarpDelay = 4f;
 
     [Header("Gravity turn")]
     [Tooltip("Altitude to begin pitching over.")]
@@ -54,6 +56,8 @@ public class AutoPilot : MonoBehaviour
     float sweptAngle;    // degrees swept around the planet since reaching orbit (for lap counting)
     Vector3 prevRadial;  // previous radial direction
     bool warpManaged;    // true while this autopilot owns Time.timeScale
+    Phase lastPhase;     // for measuring time spent in the current phase
+    float phaseTime;
 
     [System.NonSerialized] public string trace = ""; // mission trajectory log for debugging
     float logT;
@@ -100,7 +104,7 @@ public class AutoPilot : MonoBehaviour
         switch (phase)
         {
             // Warp only the pure coasts; drop back to 1x BEFORE each burn so it is clearly visible.
-            case Phase.Coast:   return radialVel > 4f ? 3f : 1f;             // slow as we near apoapsis (circularize next)
+            case Phase.Coast:   return (phaseTime > coastWarpDelay && radialVel > 4f) ? 3f : 1f; // hold 1x after cutoff, slow near apoapsis
             case Phase.Orbit:   return sweptAngle > lapTarget - 25f ? 1f : maxWarp; // slow just before the deorbit burn
             case Phase.Reentry: return alt > chuteAltitude + 40f ? maxWarp : 1f;    // warp the fall, slow before the chute
             case Phase.Chute:   return alt > chuteAltitude - 40f ? 1f : (alt > 60f ? 2f : 1f); // deploy + touchdown at 1x
@@ -114,12 +118,19 @@ public class AutoPilot : MonoBehaviour
     {
         if (!engaged || planet == null) return;
 
+        if (phase != lastPhase) { phaseTime = 0f; lastPhase = phase; }
+        phaseTime += Time.fixedDeltaTime;
+
         Vector3 r = rb.position - planet.transform.position;
         Vector3 radialOut = r.normalized;
         float alt = r.magnitude - planet.radius;
         var o = OrbitMath.Compute(r, rb.linearVelocity, planet.Mu, planet.radius);
         float apAlt = o.bound ? o.ra - planet.radius : float.PositiveInfinity;
         float radialVel = Vector3.Dot(rb.linearVelocity, radialOut); // + = climbing
+        // altitude of the actual bottom of the craft (engine), not the root origin
+        float bottomAlt = (rc.ActiveStage != null && rc.ActiveStage.thrustPoint != null)
+            ? (rc.ActiveStage.thrustPoint.position - planet.transform.position).magnitude - planet.radius
+            : alt;
 
         // Auto-stage the moment the active stage runs dry and a decoupler is available.
         if (rc.ActiveStage != null && rc.ActiveStage.separator != null && !rc.ActiveStage.HasFuel)
@@ -191,14 +202,15 @@ public class AutoPilot : MonoBehaviour
             case Phase.Chute:
                 throttle = 0f;
                 targetUp = radialOut;
-                if (rc.parachute != null) rc.parachute.Deploy(); // idempotent: only fires from Stowed
-                if (alt < 3f && o.speed < 2f) phase = Phase.Landed;
+                if (rc.parachute != null) rc.parachute.Deploy();   // idempotent: only fires from Stowed
+                if (bottomAlt < 1f && o.speed < 2f) phase = Phase.Landed; // engine actually on the ground
                 break;
 
             case Phase.Landed:
             default:
                 throttle = 0f;
                 targetUp = radialOut;
+                if (rc.parachute != null) rc.parachute.Cut();      // collapse the canopy once down
                 break;
         }
 
