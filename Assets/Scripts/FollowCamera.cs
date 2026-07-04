@@ -6,8 +6,11 @@ using UnityEngine;
 /// rolls and the planet stays at the bottom of frame anywhere in the orbit.
 /// The horizontal view heading is parallel-transported frame to frame instead
 /// of being rebuilt from world up, so nothing degenerates or flips at the
-/// poles (the launch site sits on one). Scroll wheel zooms as a pure dolly
-/// along the view axis.
+/// poles (the launch site sits on one).
+/// Manual input, active in both manual flight and autopilot: scroll wheel
+/// zooms as a pure dolly along the view axis; holding the right mouse button
+/// and dragging orbits the camera around the target (yaw spins the heading
+/// around the radial axis, pitch adjusts the clamped view elevation).
 /// </summary>
 public class FollowCamera : MonoBehaviour
 {
@@ -22,6 +25,12 @@ public class FollowCamera : MonoBehaviour
 
     [Tooltip("View elevation above the target's local horizon, degrees.")]
     [SerializeField] private float elevationDeg = 18f;
+
+    [Tooltip("Orbit degrees per mouse-axis unit while right-dragging.")]
+    [SerializeField] private float orbitSpeed = 3f;
+
+    [SerializeField] private float minElevationDeg = -70f;
+    [SerializeField] private float maxElevationDeg = 85f;
 
     [Tooltip("SmoothDamp time for position following.")]
     [SerializeField] private float smoothTime = 0.1f;
@@ -105,6 +114,18 @@ public class FollowCamera : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(target.position - transform.position, RadialUp());
     }
 
+    /// <summary>
+    /// Orbits the view around the target: yaw spins the transported heading
+    /// around the radial axis, pitch adjusts the clamped elevation. Also the
+    /// right-mouse-drag code path, public so tests can drive it directly.
+    /// </summary>
+    public void OrbitBy(float yawDeg, float pitchDeg)
+    {
+        if (target == null) return;
+        tangentHeading = Quaternion.AngleAxis(yawDeg, RadialUp()) * tangentHeading;
+        elevationDeg = Mathf.Clamp(elevationDeg + pitchDeg, minElevationDeg, maxElevationDeg);
+    }
+
     void LateUpdate()
     {
         if (target == null) return;
@@ -112,6 +133,14 @@ public class FollowCamera : MonoBehaviour
         float scroll = Input.mouseScrollDelta.y;
         if (Mathf.Abs(scroll) > 0.01f)
             Distance = distance * (1f - scroll * 0.1f);
+
+        if (Input.GetMouseButton(1))
+        {
+            float mx = Input.GetAxis("Mouse X");
+            float my = Input.GetAxis("Mouse Y");
+            if (Mathf.Abs(mx) > 0.001f || Mathf.Abs(my) > 0.001f)
+                OrbitBy(mx * orbitSpeed, my * orbitSpeed);
+        }
 
         transform.position = Vector3.SmoothDamp(transform.position, DesiredPosition(), ref smoothVelocity, smoothTime);
         AimAtTarget();
