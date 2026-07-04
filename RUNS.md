@@ -9,7 +9,8 @@ Every build attempt lives on its own `run/<model>-<date>` branch, so runs can be
 compared against each other and against the prompts on `main`.
 
 ## Gallery
-An in-flight shot from each run (all three build the same spec, so they look alike).
+A shot from each run (all three build the same spec, so they look alike). Runs 1-2
+are in flight; run 3 is on the pad (Fable's in-flight captures garbled - see below).
 
 <table>
 <tr>
