@@ -5,12 +5,17 @@ using UnityEngine;
 /// velocity split (signed climb rate + tangential/orbital speed), total speed,
 /// throttle, fuel, current stage, apoapsis/periapsis altitudes, eccentricity,
 /// and an ORBIT / SUBORBITAL / ESCAPE status derived from OrbitMath.
+/// H toggles the readout on/off (also gated by hudVisible, e.g. for captures).
 /// </summary>
 public class OrbitHUD : MonoBehaviour
 {
     public Rigidbody rb;
     public RocketController controller;
     public Parachute parachute;
+
+    [Header("Visibility")]
+    [Tooltip("Master switch for the whole IMGUI readout; toggled with H.")]
+    public bool hudVisible = true;
 
     [Header("Debug telemetry")]
     [Tooltip("Dump the same readout to the console on an interval (handy for headless verification).")]
@@ -105,6 +110,7 @@ public class OrbitHUD : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.H)) hudVisible = !hudVisible;
         RefreshColliders();
         if (!logTelemetry || rb == null || planet == null) return;
         if (Time.time < nextLog) return;
@@ -117,7 +123,7 @@ public class OrbitHUD : MonoBehaviour
 
     void OnGUI()
     {
-        if (rb == null || planet == null) return;
+        if (!hudVisible || rb == null || planet == null) return;
         EnsureStyles();
         var o = Sample();
 
