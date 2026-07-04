@@ -21,6 +21,9 @@ public class OrbitHUD : MonoBehaviour
     private GUIStyle headStyle, lineStyle, statusStyle, buttonStyle, warpStyle;
     private Texture2D barTex;
 
+    /// <summary>Hides the whole HUD (toggle with H; also used for clean captures).</summary>
+    public bool Hidden { get; set; }
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -29,6 +32,12 @@ public class OrbitHUD : MonoBehaviour
         if (planet == null)
             planet = Object.FindFirstObjectByType<PlanetBody>();
         RefreshColliders();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+            Hidden = !Hidden;
     }
 
     /// <summary>Re-scans the craft's colliders and part refs (call after staging).</summary>
@@ -80,7 +89,7 @@ public class OrbitHUD : MonoBehaviour
 
     void OnGUI()
     {
-        if (rb == null || planet == null) return;
+        if (Hidden || rb == null || planet == null) return;
         EnsureStyles();
 
         Vector3 center = planet.transform.position;
