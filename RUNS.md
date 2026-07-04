@@ -9,13 +9,27 @@ Every build attempt lives on its own `run/<model>-<date>` branch, so runs can be
 compared against each other and against the prompts on `main`.
 
 ## Gallery
-An in-flight shot from each run (all three build the same spec, so they look alike).
+All runs build the same spec, so they look alike.
+
+**Run 1** - Opus 4.8, the first build (teal, untextured planet); a single early shot:
+
+<img src="docs/runs/run1-opus.jpg" width="360">
+
+Later runs use a standardized set of four framings (pad, orbit, ascent, landing) so
+they line up for side-by-side comparison. More runs get a row here as they are captured.
 
 <table>
+<tr><th>Run</th><th>Pad</th><th>Orbit</th><th>Ascent</th><th>Landing</th></tr>
 <tr>
-<td align="center"><img src="docs/runs/run1-opus.jpg" width="260"><br><sub>Run 1 - Opus 4.8</sub></td>
-<td align="center"><img src="docs/runs/run2-opus-v2.jpg" width="260"><br><sub>Run 2 - Opus 4.8 (v2 prompts)</sub></td>
-<td align="center"><img src="docs/runs/run3-fable.jpg" width="260"><br><sub>Run 3 - Fable 5</sub></td>
+<td>Opus 4.8 (v2)</td>
+<td colspan="4"><sub>recapture in progress</sub></td>
+</tr>
+<tr>
+<td>Fable 5</td>
+<td><img src="docs/runs/fable-pad.jpg" width="170"></td>
+<td><img src="docs/runs/fable-orbit.jpg" width="170"></td>
+<td><img src="docs/runs/fable-ascent.jpg" width="170"></td>
+<td><img src="docs/runs/fable-landing.jpg" width="170"></td>
 </tr>
 </table>
 
