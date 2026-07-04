@@ -22,7 +22,10 @@ they line up for side-by-side comparison. More runs get a row here as they are c
 <tr><th>Run</th><th>Pad</th><th>Orbit</th><th>Ascent</th><th>Landing</th></tr>
 <tr>
 <td>Opus 4.8 (v2)</td>
-<td colspan="4"><sub>recapture in progress</sub></td>
+<td><img src="docs/runs/opusv2-pad.jpg" width="170"></td>
+<td><img src="docs/runs/opusv2-orbit.jpg" width="170"></td>
+<td><img src="docs/runs/opusv2-ascent.jpg" width="170"></td>
+<td><img src="docs/runs/opusv2-landing.jpg" width="170"></td>
 </tr>
 <tr>
 <td>Fable 5</td>
