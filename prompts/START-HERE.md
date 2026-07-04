@@ -25,6 +25,12 @@ Then start building, working the phases in order:
    generates). Single-line commit messages, no Co-Authored-By trailer, no
    em-dashes anywhere.
 3. Pause after Phase 1 and show me the result before continuing to the rocket.
+4. When the full demo works, add a HUD hide toggle (e.g. H) and capture 3-4 clean
+   gallery screenshots with the HUD hidden: the rocket on the pad against the
+   starfield, the craft in orbit over the planet, and the landed capsule. Capture
+   during play with the HUD hidden, or via a positioned camera; never with the
+   IMGUI HUD on screen or at timeScale=0 (both garble MCP captures on this editor).
+   Save them under docs/shots/ and commit, so they can go into RUNS.md.
 
 Use the MCP to create GameObjects/components and write scripts; don't just hand me
 code to paste.
