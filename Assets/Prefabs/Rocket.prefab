@@ -443,6 +443,7 @@ GameObject:
   - component: {fileID: 5829064055796777040}
   - component: {fileID: 7470879833982629396}
   - component: {fileID: 8527718245407758499}
+  - component: {fileID: 2178767834462500291}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Untagged
@@ -562,6 +563,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrbitHUD
   planet: {fileID: 0}
+--- !u!114 &2178767834462500291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033570734954151270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7f7e874666b38008de3b58f7ac21fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoPilot
+  apoapsisTargetAlt: 800
+  apoapsisFeather: 160
+  maxTurnDeg: 60
+  turnEndAlt: 320
+  periapsisTarget: 110
+  circThrottleCap: 0.6
+  escapeGuardFrac: 0.96
+  deorbitPeriapsis: -80
+  chuteDeployAlt: 240
+  maxWarp: 4
+  coastWarpDelay: 4
+  attitudeKp: 3
+  attitudeKd: 2
 --- !u!1 &3208867816264768816
 GameObject:
   m_ObjectHideFlags: 0

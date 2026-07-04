@@ -15,15 +15,17 @@ public class OrbitHUD : MonoBehaviour
     private Rigidbody rb;
     private RocketController controller;
     private Parachute parachute;
+    private AutoPilot autopilot;
     private Collider[] craftColliders;
 
-    private GUIStyle headStyle, lineStyle, statusStyle, buttonStyle;
+    private GUIStyle headStyle, lineStyle, statusStyle, buttonStyle, warpStyle;
     private Texture2D barTex;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         controller = GetComponent<RocketController>();
+        autopilot = GetComponent<AutoPilot>();
         if (planet == null)
             planet = Object.FindFirstObjectByType<PlanetBody>();
         RefreshColliders();
@@ -60,6 +62,7 @@ public class OrbitHUD : MonoBehaviour
         lineStyle = new GUIStyle(GUI.skin.label) { fontSize = 20 };
         statusStyle = new GUIStyle(GUI.skin.label) { fontSize = 30, fontStyle = FontStyle.Bold };
         buttonStyle = new GUIStyle(GUI.skin.button) { fontSize = 20, fontStyle = FontStyle.Bold };
+        warpStyle = new GUIStyle(GUI.skin.label) { fontSize = 26, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
         barTex = Texture2D.whiteTexture;
     }
 
@@ -138,6 +141,24 @@ public class OrbitHUD : MonoBehaviour
             && GUILayout.Button("STAGE", buttonStyle, GUILayout.Height(40)))
             controller.StageNow();
 
+        if (autopilot != null)
+        {
+            if (autopilot.Engaged)
+                GUILayout.Label($"AP: {autopilot.CurrentPhase}", lineStyle);
+            if (GUILayout.Button(autopilot.Engaged ? "AUTOPILOT OFF (T)" : "AUTOPILOT (T)", buttonStyle, GUILayout.Height(40)))
+                autopilot.Toggle();
+        }
+
         GUILayout.EndArea();
+
+        // centered time-warp indicator, hidden at 1x
+        if (Time.timeScale > 1.05f)
+        {
+            Color prev = GUI.contentColor;
+            GUI.contentColor = new Color(1f, 0.8f, 0.25f);
+            GUI.Label(new Rect(Screen.width / 2f - 180, 10, 360, 40),
+                $">> {Time.timeScale:F0}x TIME WARP <<", warpStyle);
+            GUI.contentColor = prev;
+        }
     }
 }
