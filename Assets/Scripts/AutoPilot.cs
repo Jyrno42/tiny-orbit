@@ -5,8 +5,10 @@ using UnityEngine;
 /// Autonomous mission: launch, capped gravity turn, full-throttle booster to
 /// depletion with auto-stage, feathered final-stage burn to the apoapsis
 /// target, coast, capped horizontal circularization with a hard escape-speed
-/// guard, one full 360-degree orbit, retrograde deorbit, shield-first reentry,
-/// parachute deploy and landing. Engage with T or the HUD button.
+/// guard, one full 360-degree orbit, retrograde deorbit, then an upright
+/// radial attitude hold (nose out, heat shield toward the planet) through
+/// reentry and the parachute descent so the capsule lands on its base.
+/// Engage with T or the HUD button.
 /// Drives Time.timeScale KSP-style: 1x for every burn (with anticipation),
 /// warp on coasts and the orbital lap, always reset on end/disable.
 /// Keeps a per-second trace buffer (cleared on engage) because live polling
@@ -284,8 +286,9 @@ public class AutoPilot : MonoBehaviour
 
             case Phase.Reentry:
                 rc.Throttle = 0f;
-                if (vel.sqrMagnitude > 1f)
-                    PointAt(-vel.normalized); // heat shield leads
+                // nose radially out, heat shield toward the planet, so the
+                // capsule arrives at the ground already upright
+                PointAt(radial);
                 if (alt < chuteDeployAlt && vUp < 0f)
                 {
                     if (chute != null)
@@ -297,11 +300,11 @@ public class AutoPilot : MonoBehaviour
 
             case Phase.Descent:
                 rc.Throttle = 0f;
-                rc.RotationInput = Vector3.zero;
+                PointAt(radial); // hold upright against the chute until touchdown
                 if (alt < 0.6f && vel.magnitude < 1f)
                 {
                     Time.timeScale = 1f;
-                    Log($"LANDED, touchdown speed={vel.magnitude:F2}");
+                    Log($"LANDED, touchdown speed={vel.magnitude:F2} upright={Vector3.Dot(transform.up, radial):F2}");
                     Next(Phase.Landed);
                 }
                 break;
@@ -320,7 +323,7 @@ public class AutoPilot : MonoBehaviour
         if (Time.time >= nextTrace)
         {
             nextTrace = Time.time + 1f;
-            trace.Add($"t={Time.time:F0} ph={CurrentPhase} alt={alt:F0} v={el.speed:F1} vUp={vUp:F1} Ap={(float.IsInfinity(apAlt) ? -1f : apAlt):F0} Pe={peAlt:F0} thr={rc.Throttle:F2} fuel={Fuel():F0} warp={Time.timeScale:F0}");
+            trace.Add($"t={Time.time:F0} ph={CurrentPhase} alt={alt:F0} v={el.speed:F1} vUp={vUp:F1} Ap={(float.IsInfinity(apAlt) ? -1f : apAlt):F0} Pe={peAlt:F0} thr={rc.Throttle:F2} fuel={Fuel():F0} warp={Time.timeScale:F0} up={Vector3.Dot(transform.up, radial):F2}");
         }
     }
 
