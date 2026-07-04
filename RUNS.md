@@ -8,6 +8,17 @@ It contains **no game build**.
 Every build attempt lives on its own `run/<model>-<date>` branch, so runs can be
 compared against each other and against the prompts on `main`.
 
+## Gallery
+An in-flight shot from each run (all three build the same spec, so they look alike).
+
+<table>
+<tr>
+<td align="center"><img src="docs/runs/run1-opus.jpg" width="260"><br><sub>Run 1 - Opus 4.8</sub></td>
+<td align="center"><img src="docs/runs/run2-opus-v2.jpg" width="260"><br><sub>Run 2 - Opus 4.8 (v2 prompts)</sub></td>
+<td align="center"><img src="docs/runs/run3-fable.jpg" width="260"><br><sub>Run 3 - Fable 5</sub></td>
+</tr>
+</table>
+
 ## Start a new run
 1. `git checkout main`
 2. `git checkout -b run/<model>-<date>`  (or: `./scripts/new-run.sh <model>-<date>`)
