@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3099659549110148379}
   - component: {fileID: 7850148786759694080}
   - component: {fileID: 5068729074694049960}
+  - component: {fileID: 5728895580171363357}
   m_Layer: 0
   m_Name: Separator
   m_TagString: Untagged
@@ -90,6 +91,24 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5728895580171363357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509143659063492877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60523cd9387727be8b704140ddf96c55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StackSeparator
+  popImpulse: 8
+  despawnAfter: 30
+  boosterColliderSize: {x: 1.1, y: 2.24, z: 1.1}
+  boosterColliderCenter: {x: 0, y: 1.12, z: 0}
+  upperColliderSize: {x: 1.1, y: 2.44, z: 1.1}
+  upperColliderCenter: {x: 0, y: 3.48, z: 0}
 --- !u!1 &683264142912561564
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,6 +227,7 @@ GameObject:
   - component: {fileID: 7667685984903308226}
   - component: {fileID: 1212666711015276449}
   - component: {fileID: 9220096497050651110}
+  - component: {fileID: 6728340077050223477}
   m_Layer: 0
   m_Name: FuelTank2
   m_TagString: Untagged
@@ -287,6 +307,20 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6728340077050223477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023923124506037421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de68aef433243115aa3d77af2a06a011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FuelTank
+  maxFuel: 80
+  fuel: 80
 --- !u!1 &2536600477150459442
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,6 +527,10 @@ MonoBehaviour:
   torquePower: 15
   throttleRate: 0.5
   angularDamping: 1.5
+  stages:
+  - {fileID: 6920624379871587676}
+  - {fileID: 6632095960428522355}
+  separator: {fileID: 5728895580171363357}
 --- !u!114 &8527718245407758499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -515,6 +553,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8665473080478166978}
+  - component: {fileID: 6920624379871587676}
   m_Layer: 0
   m_Name: Stage1
   m_TagString: Untagged
@@ -541,6 +580,24 @@ Transform:
   - {fileID: 523163142264723405}
   m_Father: {fileID: 5356797263234814107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6920624379871587676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3208867816264768816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23d24d3e3e8e3f81a54b040fa897679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Stage
+  tank: {fileID: 6180833741792694561}
+  maxThrust: 120
+  fuelBurnPerSecond: 8
+  dryMass: 0.8
+  fuelMassPerUnit: 0.05
+  thrustPoint: {fileID: 523163142264723405}
 --- !u!1 &4319898252968519039
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +697,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3155981255924829424}
+  - component: {fileID: 6632095960428522355}
   m_Layer: 0
   m_Name: Stage2
   m_TagString: Untagged
@@ -666,6 +724,24 @@ Transform:
   - {fileID: 7886809149488235174}
   m_Father: {fileID: 5356797263234814107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6632095960428522355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4919717953561974651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23d24d3e3e8e3f81a54b040fa897679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Stage
+  tank: {fileID: 6728340077050223477}
+  maxThrust: 70
+  fuelBurnPerSecond: 3.5
+  dryMass: 1.5
+  fuelMassPerUnit: 0.0225
+  thrustPoint: {fileID: 7886809149488235174}
 --- !u!1 &5183112612044496542
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,6 +857,7 @@ GameObject:
   - component: {fileID: 5977917184996478742}
   - component: {fileID: 8254226544440824236}
   - component: {fileID: 5212739471962336077}
+  - component: {fileID: 6180833741792694561}
   m_Layer: 0
   m_Name: FuelTank1
   m_TagString: Untagged
@@ -860,6 +937,20 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6180833741792694561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5628106804259060926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de68aef433243115aa3d77af2a06a011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FuelTank
+  maxFuel: 18
+  fuel: 18
 --- !u!1 &6187537414478668878
 GameObject:
   m_ObjectHideFlags: 0

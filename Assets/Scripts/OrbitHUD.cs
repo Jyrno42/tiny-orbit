@@ -16,7 +16,7 @@ public class OrbitHUD : MonoBehaviour
     private RocketController controller;
     private Collider[] craftColliders;
 
-    private GUIStyle headStyle, lineStyle, statusStyle;
+    private GUIStyle headStyle, lineStyle, statusStyle, buttonStyle;
     private Texture2D barTex;
 
     void Awake()
@@ -57,6 +57,7 @@ public class OrbitHUD : MonoBehaviour
         headStyle = new GUIStyle(GUI.skin.label) { fontSize = 24, fontStyle = FontStyle.Bold };
         lineStyle = new GUIStyle(GUI.skin.label) { fontSize = 20 };
         statusStyle = new GUIStyle(GUI.skin.label) { fontSize = 30, fontStyle = FontStyle.Bold };
+        buttonStyle = new GUIStyle(GUI.skin.button) { fontSize = 20, fontStyle = FontStyle.Bold };
         barTex = Texture2D.whiteTexture;
     }
 
@@ -87,7 +88,7 @@ public class OrbitHUD : MonoBehaviour
         float vSpeed = Vector3.Dot(vVec, radial);
         float hSpeed = (vVec - radial * vSpeed).magnitude;
 
-        GUILayout.BeginArea(new Rect(12, 12, 340, 560), GUI.skin.box);
+        GUILayout.BeginArea(new Rect(12, 12, 340, 640), GUI.skin.box);
         GUILayout.Label("TINY ORBIT", headStyle);
         GUILayout.Label($"Altitude   {GroundClearance():F0} m", lineStyle);
         GUILayout.Label($"Vertical   {vSpeed:+0.0;-0.0} m/s", lineStyle);
@@ -98,6 +99,17 @@ public class OrbitHUD : MonoBehaviour
         float throttle = controller != null ? controller.Throttle : 0f;
         GUILayout.Label($"Throttle   {throttle * 100f:F0}%", lineStyle);
         DrawBar(throttle, new Color(1f, 0.55f, 0.1f));
+
+        var stage = controller != null ? controller.ActiveStage : null;
+        if (stage != null)
+        {
+            GUILayout.Label($"Stage      {controller.ActiveStageIndex + 1} / {controller.StageCount}", lineStyle);
+            if (stage.tank != null)
+            {
+                GUILayout.Label($"Fuel       {stage.tank.Fuel:F0} / {stage.tank.MaxFuel:F0}" + (stage.tank.IsEmpty ? "  FLAMEOUT" : ""), lineStyle);
+                DrawBar(stage.tank.Fraction, new Color(0.3f, 0.8f, 1f));
+            }
+        }
         GUILayout.Space(6);
 
         string apText = el.isBound ? $"{el.apoapsisRadius - R:F0} m" : "-";
@@ -116,6 +128,11 @@ public class OrbitHUD : MonoBehaviour
         GUI.contentColor = statusColor;
         GUILayout.Label(status, statusStyle);
         GUI.contentColor = oldColor;
+        GUILayout.Space(8);
+
+        if (controller != null && controller.StageCount > 1 && controller.ActiveStageIndex == 0
+            && GUILayout.Button("STAGE", buttonStyle, GUILayout.Height(40)))
+            controller.StageNow();
 
         GUILayout.EndArea();
     }
