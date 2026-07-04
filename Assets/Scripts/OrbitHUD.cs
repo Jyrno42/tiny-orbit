@@ -14,6 +14,7 @@ public class OrbitHUD : MonoBehaviour
 
     private Rigidbody rb;
     private RocketController controller;
+    private Parachute parachute;
     private Collider[] craftColliders;
 
     private GUIStyle headStyle, lineStyle, statusStyle, buttonStyle;
@@ -28,10 +29,11 @@ public class OrbitHUD : MonoBehaviour
         RefreshColliders();
     }
 
-    /// <summary>Re-scans the craft's colliders (call after staging).</summary>
+    /// <summary>Re-scans the craft's colliders and part refs (call after staging).</summary>
     public void RefreshColliders()
     {
         craftColliders = GetComponentsInChildren<Collider>();
+        parachute = GetComponentInChildren<Parachute>();
     }
 
     /// <summary>Ground clearance from the craft's lowest collider point (m). Negative when below the surface.</summary>
@@ -110,6 +112,8 @@ public class OrbitHUD : MonoBehaviour
                 DrawBar(stage.tank.Fraction, new Color(0.3f, 0.8f, 1f));
             }
         }
+        if (parachute != null)
+            GUILayout.Label($"Chute      {parachute.CurrentState}", lineStyle);
         GUILayout.Space(6);
 
         string apText = el.isBound ? $"{el.apoapsisRadius - R:F0} m" : "-";

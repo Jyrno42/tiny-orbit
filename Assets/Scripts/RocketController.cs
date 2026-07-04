@@ -177,6 +177,9 @@ public class RocketController : MonoBehaviour
         for (int i = ActiveStageIndex; i < stages.Count; i++)
             if (stages[i] != null && stages[i].tank != null)
                 stages[i].tank.Refill();
+        var chute = GetComponentInChildren<Parachute>();
+        if (chute != null)
+            chute.Rearm();
         UpdateMass();
         Physics.SyncTransforms();
     }
