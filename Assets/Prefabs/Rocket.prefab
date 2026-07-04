@@ -390,6 +390,7 @@ GameObject:
   - component: {fileID: 5823089834662311504}
   - component: {fileID: 5829064055796777040}
   - component: {fileID: 7470879833982629396}
+  - component: {fileID: 8527718245407758499}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Untagged
@@ -492,6 +493,19 @@ MonoBehaviour:
   torquePower: 15
   throttleRate: 0.5
   angularDamping: 1.5
+--- !u!114 &8527718245407758499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033570734954151270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb469d72ff2373ffafd4b7f635f13f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OrbitHUD
+  planet: {fileID: 0}
 --- !u!1 &3208867816264768816
 GameObject:
   m_ObjectHideFlags: 0
