@@ -9,7 +9,9 @@ models plan and build it from the same starting point.
 - Tooling: Claude Code CLI (VSCode extension).
 - Date: 2026-06-14.
 - Working dir: `/home/jyrno42/projects/gameprojects/ai-test/opus/tiny-orbit`
-- Output: `README.md`, `PLAN.md`, `TODO.md`, `.gitignore`, `prompts/00..07`.
+- Output: `README.md`, `PLAN.md`, `TODO.md`, `.gitignore`, `prompts/00..07`
+  (phases 08-09 and the "learnings" sections were added later, folded in from the
+  build runs; see [RUNS.md](RUNS.md)).
 
 ## Prompt 1 (initial request)
 

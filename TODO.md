@@ -4,7 +4,7 @@ Generic checklist for the demo. Check items off as you go. Keep it loose -
 add/remove freely.
 
 ## Phase 0 - Project setup
-- [ ] Create Unity project (2022.3 LTS+), 3D template
+- [ ] Create Unity project (Unity 6000.4.11f1 / 6.4), 3D template
 - [ ] Add folder structure under `Assets/` (Scripts, Prefabs, Scenes)
 - [ ] Create `Launch` scene
 - [ ] Add a `Constants`/`PlanetBody` script with R, g0, mu
@@ -60,9 +60,22 @@ add/remove freely.
 - [ ] Canopy visual when deployed; HUD shows parachute state
 - [ ] Verify: separator pops apart; chute lands the capsule under ~6 m/s
 
+## Phase 8 - Space visuals
+- [ ] Black sky; Sun directional light with low ambient fill (day/night terminator)
+- [ ] Procedural starfield skybox (uniform stars, a few colored, faint nebula)
+- [ ] Textured planet (seamless 3D-direction noise: oceans, continents, ice caps)
+- [ ] Throttle-driven engine exhaust plume, built at runtime, active stage only
+- [ ] Verify: plume scales with throttle; planet + stars read as space
+
+## Phase 9 - Autopilot
+- [ ] `AutoPilot` (key T): launch -> gravity turn -> auto-stage -> circularize
+- [ ] Orbit lap -> deorbit -> reentry -> parachute -> upright landing
+- [ ] Phase-keyed auto time-warp (1x burns, up to 4x coasts) + HUD indicator
+- [ ] In-game trace buffer for after-the-run verification
+- [ ] Verify: full hands-off flight reaches orbit and lands
+
 ## Polish / stretch
 - [ ] Launch from a clean reset (R to respawn on pad)
-- [ ] Simple particle/exhaust on the engine
 - [ ] Thin atmosphere + drag
 - [ ] Predicted trajectory line
 - [ ] Map view / maneuver nodes

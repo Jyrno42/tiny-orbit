@@ -86,7 +86,9 @@ Each phase is small, testable on its own, and has a prompt file.
 - Predicted-trajectory line via patched conics or simple forward integration.
 - Map view, maneuver nodes, multiple parts/engines, save/load.
 
-## Project structure (target, once Unity code exists)
+## Project structure (target; realized on the `run/` branches)
+`main` ships the scaffold (PlanetBody plus the FrustumMesh/LatheMesh tools); the
+rest below is built out per run on the `run/<model>-<date>` branches.
 ```
 Assets/
   Scripts/
@@ -100,6 +102,8 @@ Assets/
     StackSeparator.cs    # decoupler: split into two Rigidbodies + push apart
     HeatShield.cs        # base shield (ablator stub for future reentry heat)
     Parachute.cs         # deploy state machine + speed-based drag
+    EnginePlume.cs       # runtime-built, throttle-driven exhaust particles
+    AutoPilot.cs         # full launch-to-land mission + auto time-warp
   Prefabs/
     Rocket.prefab
   Scenes/

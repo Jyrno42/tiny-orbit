@@ -6,7 +6,7 @@ A blank but well-organized Unity project ready to build the demo into.
 ## Prompt
 
 > Set up a new Unity 3D project for a tiny KSP-style rocket demo called
-> "Tiny Orbit". I'm using Unity 2022.3 LTS (built-in render pipeline is fine).
+> "Tiny Orbit". I'm using Unity 6000.4.11f1 (Unity 6.4; built-in render pipeline is fine).
 >
 > Do the following:
 > 1. Create the folder structure under `Assets/`: `Scripts/`, `Prefabs/`,
