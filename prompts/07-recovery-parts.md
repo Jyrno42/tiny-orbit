@@ -53,3 +53,6 @@ and a parachute for a soft landing.
 
 ## Build-session learnings
 - On touchdown, cut the parachute and collapse the canopy (scale -> 0); a chute left inflated reads as the craft floating. Detect landing from the craft's lowest part, not the Rigidbody root (root sits ~3m below the engine after staging, so root-based detection stops early or never triggers). Tune chute drag so descent is brisk enough to record (~3 m/s touchdown), not an ~80s drift.
+
+## Run 3 learnings (v4)
+- Prefer a parachute that WEATHERVANES the craft over a rigid forced attitude. Model the chute so its drag also applies a restoring torque that aligns the craft's long axis with the velocity vector (retrograde) - physically, the chute attaches above the centre of mass and drags. The craft then rides sideways while horizontal velocity is high and rotates upright on its own as the descent becomes vertical-dominated, landing on its base naturally. This reads far better than hard-locking the attitude to radial-out (which lands upright but looks stiff).

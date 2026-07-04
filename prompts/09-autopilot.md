@@ -57,3 +57,7 @@ indicator.
 ## Run 2 learnings
 - The autopilot must burn each lower stage to depletion at FULL throttle before it stages. A feathered/throttle-limited ascent leaves fuel in the booster, so the "tank empty" stage trigger never fires and the rocket never decouples. Size the booster fuel and the apoapsis target so the booster runs dry mid-ascent and decouples cleanly (Ap ~800 / Pe ~128 worked).
 - Self-inflicted landing artifact: with boosters left in the world, the returning capsule can touch down on a spent booster and read as hovering. Despawn boosters after separation (see Phase 6).
+
+## Run 3 learnings (v4)
+- Two gaps a fully-autonomous run misses unless told: (1) manual camera controls must exist (see Phase 4), and (2) the craft should land upright.
+- For upright landing, PREFER letting the parachute weathervane the craft to retrograde (see Phase 7) rather than commanding a rigid upright attitude hold. Under the chute, stop issuing reaction-wheel attitude commands and let drag orient the craft, so it transitions from sideways (high horizontal velocity) to upright (vertical-dominated) on its own before touchdown. A forced PointAt(radial) hold also lands upright but looks stiff.

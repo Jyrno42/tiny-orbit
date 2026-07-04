@@ -60,3 +60,14 @@ throttle-driven engine exhaust plume on the firing stage.
 ## Run 2 learnings
 - Texture the planet with SEAMLESS noise: sample the noise by 3D world-space direction (the surface normal), NOT by UV coordinates, so there are no grid lines or pole/UV seams. Suggested look: blue oceans, green/tan continents, white ice caps, matte (non-glossy) material.
 - CRITICAL material/texture ref: assign the SAVED texture asset to the material, never a transient runtime-generated texture. A material pointing at a transient texture serializes as a null/white reference and the planet renders washed-out white. Generate the texture, save it as an asset, assign that asset, and read the material's texture ref back to confirm it persisted.
+
+## Run 3 learnings (v4) - plume tuning
+The plume look is easy to under-tune. Use these values from the manually-tuned run
+(a dense, continuous, tapering flame) as the defaults rather than guessing:
+- Emission: `maxRate = 300`, `rateOverTime = maxRate * throttle` every frame.
+- `nozzleRadius = 0.25`; cone shape aimed out the nozzle (emit euler (90,0,0) so it points along -Y).
+- Low, randomized speed and lifetime for a dense flame that does not pulse: `speedRange = (6, 13)`, `lifetimeRange = (0.6, 1.1)`.
+- Throttle response: `startSpeedMultiplier` lerp 0.5 -> 1, `startLifetimeMultiplier` lerp 0.6 -> 1 with throttle.
+- Colour over lifetime (bright core fading orange then red): (1, 1, 0.85) at 0.0 -> (1, 0.55, 0.15) at 0.5 -> (0.85, 0.12, 0.08) at 1.0. Alpha in then out: 0 at 0.0 -> 1 at 0.18 -> 0.75 at 0.6 -> 0 at 1.0.
+- Size over lifetime taper: 0.5 at 0.0 -> 1 at 0.25 -> 0.2 at 1.0.
+- Renderer: additive (Legacy Shaders/Particles/Additive), billboard, with a soft round dot texture built at runtime (~64px radial falloff). `cullingMode = AlwaysSimulate` so it never pauses off-screen.
