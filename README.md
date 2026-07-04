@@ -1,51 +1,59 @@
-# Tiny Orbit - a super simple KSP-style rocket demo (Unity)
+# Tiny Orbit - a tiny KSP-style rocket demo, built by AI via Unity MCP
 
-A minimal Kerbal Space Program-inspired demo: build a rocket out of basic
-primitives (cylinders, cones, capsules), launch it, and put it into a stable
-orbit around a single planet. No part catalog, no tech tree, no career mode -
-just the core loop of **throttle up, gain horizontal velocity, circularize**.
+A minimal Kerbal Space Program-inspired demo: a rocket built from basic primitives
+(cylinders, cones, capsules) that launches from a pad, reaches a stable orbit
+around a single planet, then deorbits and lands - by hand or via a one-press
+autopilot. No part catalog, no tech tree, just the core loop: **throttle up, gain
+horizontal velocity, circularize**, then come home.
+
+It also doubles as a small **benchmark**: the same prompt spec is handed to
+different AI models, which build the whole thing inside the Unity editor through a
+Model Context Protocol (MCP) connection. See [RUNS.md](RUNS.md) for the runs and
+how they compare.
+
+## Two things in one repo
+- **The recipe** (on `main`): a phase-by-phase prompt spec ([prompts/](prompts/),
+  [PLAN.md](PLAN.md)) plus a clean, pre-configured Unity project to build it into.
+- **The builds** (on `run/<model>-<date>` branches): each branch is one AI model's
+  full implementation of the recipe.
 
 ## Goal of the demo
-
 Stand on a launchpad, light the engine, fly up, pitch over, and reach a stable
-orbit where periapsis is above the planet's surface. A small HUD shows altitude,
-speed, throttle, and live apoapsis/periapsis so you know when you've made orbit.
+orbit (periapsis above the surface), then deorbit and land under a parachute. A
+HUD shows altitude, a vertical/horizontal velocity split, throttle/fuel, and live
+apoapsis/periapsis so you know when you have made orbit.
 
 ## Scope (intentionally tiny)
+In scope: one planet with inverse-square gravity; a 2-stage rocket from Unity
+primitives; nose thrust plus reaction-wheel rotation; throttle, staging, and fuel;
+a follow camera; an orbital-readout HUD; a parachute landing; a full
+launch-to-land autopilot; and a starfield plus textured planet.
 
-In scope:
-- One planet with inverse-square gravity (no atmosphere, or a trivial drag stub).
-- One rocket assembled from Unity primitives in the editor.
-- Thrust along the rocket's nose, reaction-wheel style rotation control.
-- Throttle, staging (drop empty stage), and fuel burn.
-- Follow camera and a text HUD with orbital readouts.
+Out of scope (kept for later): atmosphere/aero, multiple bodies, patched-conic
+trajectory prediction, docking, in-game part editor, save/load.
 
-Out of scope (kept for later): atmosphere/aero, multiple celestial bodies,
-patched-conic trajectory prediction, docking, in-game part editor, save/load.
+## See a built demo
+```
+git checkout run/fable-5-2026-06-15      # or any other run/ branch
+```
+Open the project in Unity, open `Assets/Scenes/Launch.unity`, press Play, then
+**T** for the autonomous flight. Manual controls: Shift/Ctrl throttle, Z/X
+full/cut, WASD + Q/E rotate, Space stage, P parachute, R reset.
 
-## How to use this repo
+## Start your own run
+`main` is a clean, pre-configured baseline. To have a model build it from scratch:
+```
+./scripts/new-run.sh <model>-<date>      # branches run/<model>-<date> off main
+```
+Then open the project in Unity and paste [prompts/START-HERE.md](prompts/START-HERE.md)
+as the first message to the build session. [RUNS.md](RUNS.md) has the full workflow
+and the run log.
 
-This repo is **plans and prompts**, not (yet) Unity code. The intended workflow:
-
-1. Read [PLAN.md](PLAN.md) for the architecture and phase breakdown.
-2. Work the phases in order. Each phase has a ready-to-use prompt in
-   [prompts/](prompts/) that you can hand to an AI coding assistant (or follow
-   by hand) to implement that slice in Unity.
-3. Track progress in [TODO.md](TODO.md).
-
-The original human prompts that produced this repo are recorded verbatim in
-[PROMPT-LOG.md](PROMPT-LOG.md) for reproducibility and for benchmarking other
-(e.g. local) models on the same task later.
+The original human prompts that seeded the repo are recorded verbatim in
+[PROMPT-LOG.md](PROMPT-LOG.md) for reproduction and benchmarking.
 
 ## Target environment
-
-- Unity 2022.3 LTS or newer (Built-in or URP - either is fine).
-- C# / MonoBehaviour scripts.
-- Desktop keyboard + mouse input.
-
-## Benchmark workspace (branch-per-run)
-
-This repo doubles as a benchmark harness. `main` holds the recipe + a clean,
-pre-configured Unity project; each build attempt lives on a `run/<model>-<date>`
-branch. See [RUNS.md](RUNS.md) for how to start a run, view a run's results, and
-the log of runs so far. Helper: `./scripts/new-run.sh <model>-<date>`.
+- Unity 6000.4.11f1 (Unity 6.4); C# / MonoBehaviour scripts.
+- Unity MCP: CoplayDev `com.coplaydev.unity-mcp` (connection recap at the bottom of
+  [prompts/START-HERE.md](prompts/START-HERE.md)).
+- Desktop keyboard + mouse.
