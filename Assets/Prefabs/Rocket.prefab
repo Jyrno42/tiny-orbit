@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 931301173466233147}
   - component: {fileID: 4376920595831553433}
   - component: {fileID: 7282274467863427504}
+  - component: {fileID: 393764904159412088}
   m_Layer: 0
   m_Name: Engine1
   m_TagString: Untagged
@@ -216,6 +217,23 @@ MonoBehaviour:
   topRadius: 0.28
   height: 0.5
   segments: 24
+--- !u!114 &393764904159412088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683264142912561564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca495ecd46a858d6971e7dfc16d1bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnginePlume
+  maxRate: 300
+  nozzleRadius: 0.22
+  speedRange: {x: 6, y: 10}
+  lifetimeRange: {x: 0.6, y: 1.1}
+  sizeMul: 1
 --- !u!1 &1023923124506037421
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,6 +1155,7 @@ GameObject:
   - component: {fileID: 7168788137839482566}
   - component: {fileID: 810024969711363597}
   - component: {fileID: 1449007364864106022}
+  - component: {fileID: 1176438176710215809}
   m_Layer: 0
   m_Name: Engine2
   m_TagString: Untagged
@@ -1232,6 +1251,23 @@ MonoBehaviour:
   topRadius: 0.16
   height: 0.35
   segments: 24
+--- !u!114 &1176438176710215809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578445336762078899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca495ecd46a858d6971e7dfc16d1bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnginePlume
+  maxRate: 240
+  nozzleRadius: 0.15
+  speedRange: {x: 6, y: 10}
+  lifetimeRange: {x: 0.6, y: 1.1}
+  sizeMul: 0.8
 --- !u!1 &6750131660154800856
 GameObject:
   m_ObjectHideFlags: 0
